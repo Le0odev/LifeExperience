@@ -8,29 +8,43 @@ const ProgramacaoContainer = styled.section`
     color: #fecf03; /* Cor do texto */
     text-align: center;
     height: auto; /* Ajuste automático da altura */
-    height: 100%;
+    height: 100vh;
 
-    
+     @media (max-width: 768px) {
+    margin: 0 auto;
+    height: 100%
+    }
+
 `;
 
 
 const ContentWrapper = styled.div`
-    margin-top: 25px; /* Espaço acima do conteúdo */
+    margin-top: 55px; /* Espaço acima do conteúdo */
 `;
 
 const Title = styled.h2`
-    font-size: 40px;
+    font-size: 3.5rem;
     margin-bottom: 20px;
+    font-weight: bold;
+
+    @media (max-width: 768px) {
+        font-size: 2rem;
+     }
+    
 `;
 
 const EventList = styled.div`
     display: flex;
-    justify-content: space-around; /* Distribui as colunas */
-    flex-wrap: wrap; /* Permite que as colunas se ajustem em telas menores */
+    justify-content: center; /* Distribui as colunas */
+    margin-top: 50px;
+    gap: 40px;
+    margin-bottom: 0px;
 
     @media (max-width: 768px) {
     margin: 0 auto;
-  }
+    flex-wrap: wrap; /* Permite que as colunas se ajustem em telas menores */
+
+     }
 
 `;
 
@@ -40,9 +54,9 @@ const EventCard = styled.div`
     border-radius: 8px;
     padding: 20px;
     margin: 10px; /* Espaçamento entre os cards */
-    width: 30%; /* Largura dos cards */
+    width: 50%; /* Largura dos cards */
     max-width: 300px; /* Largura máxima dos cards */
-    
+
     /* Estilos responsivos */
     @media (max-width: 768px) {
         width: 100%; /* Largura total em telas menores */
@@ -76,6 +90,28 @@ const ReserveButton = styled.a`
     }
 `;
 
+const Subtitle = styled.p`
+    font-size: 28px; /* Tamanho do subtítulo */
+    margin-bottom: 40px; /* Espaçamento abaixo do subtítulo */
+
+    /* Responsividade para o subtítulo */
+    @media (max-width: 768px) {
+        font-size: 18px; /* Tamanho do subtítulo em telas menores */
+        margin-bottom: 20px; /* Ajuste de espaçamento */
+    }
+`;
+
+const Highlight = styled.span`
+    color: #e6b600; /* Cor de destaque para a palavra CONCEITO */
+    font-size: 3.5rempx; /* Tamanho maior para destaque */
+
+    /* Responsividade para a palavra em destaque */
+    @media (max-width: 768px) {
+        font-size: 32px; /* Tamanho em telas menores */
+    }
+`;
+
+
 // Função para gerar as próximas datas
 const getUpcomingDates = () => {
     const today = new Date();
@@ -103,7 +139,8 @@ const Programacao: React.FC = () => {
     return (
         <ProgramacaoContainer id="programacao">
             <ContentWrapper>
-                <Title>Programação semanal</Title>
+                <Title>PROGAMAÇÃO <Highlight>SEMANAL</Highlight></Title>
+                <Subtitle>Confira os eventos da semana  ⚡</Subtitle>
                 <EventList>
                     {upcomingEventDates.map((event, index) => (
                         <EventCard key={index}>
