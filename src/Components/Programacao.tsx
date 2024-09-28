@@ -1,15 +1,14 @@
 // src/components/Programacao.tsx
-import { collection, getDocs } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { db } from '../Config/firebase';
 
 const ProgramacaoContainer = styled.section`
     padding: 60px 20px;
     background-color: #000000; /* Cor de fundo */
     color: #fecf03; /* Cor do texto */
     text-align: center;
-    height: 100%;
+    height: auto; /* Ajuste automático da altura */
+    height: 100vh;
 
      @media (max-width: 768px) {
     margin: 0 auto;
@@ -20,17 +19,12 @@ const ProgramacaoContainer = styled.section`
 
 
 const ContentWrapper = styled.div`
-    margin-top: 65px; /* Espaço acima do conteúdo */
-
-     @media (max-width: 768px) {
-         margin-top: 25px; /* Espaço acima do conteúdo */
-
-     }
-    
+    margin-top: 55px; /* Espaço acima do conteúdo */
 `;
 
 const Title = styled.h2`
     font-size: 3.5rem;
+    margin-bottom: 20px;
     font-weight: bold;
 
     @media (max-width: 768px) {
@@ -144,62 +138,46 @@ const Highlight = styled.span`
 
 
 // Função para gerar as próximas datas
-const Programacao: React.FC = () => {
-    const [events, setEvents] = useState<any[]>([]); // Estado para armazenar eventos
-  
-    useEffect(() => {
-      const fetchEvents = async () => {
-        const querySnapshot = await getDocs(collection(db, 'events'));
-        const eventsData: any[] = [];
-        querySnapshot.forEach((doc) => {
-          eventsData.push({ id: doc.id, ...doc.data() });
-        });
-        setEvents(eventsData);
-      };
-      
-      fetchEvents();
-    }, []);
-  
-    // Função para gerar as próximas datas
-    const getUpcomingDates = () => {
-      const today = new Date();
-      const upcomingEvents = [];
-      const weekdays = ['Quinta', 'Sexta', 'Sábado'];
-      const dayOffsets = [4, 5, 6]; // 4: Quinta, 5: Sexta, 6: Sábado
-      let week = 0;
-  
-      while (upcomingEvents.length < 3) {
+const getUpcomingDates = () => {
+    const today = new Date();
+    const upcomingEvents = [];
+    const weekdays = ['Quinta', 'Sexta', 'Sábado'];
+    const dayOffsets = [4, 5, 6]; // 4: Quinta, 5: Sexta, 6: Sábado
+    let week = 0;
+
+    while (upcomingEvents.length < 3) {
         for (let i = 0; i < dayOffsets.length; i++) {
-          const date = new Date(today.getFullYear(), today.getMonth(), (week * 7) + dayOffsets[i]);
-          if (date >= today) {
-            upcomingEvents.push({ date: date.toLocaleDateString(), day: weekdays[i], flyer: events[i]?.flyers[i] });
-            if (upcomingEvents.length === 3) break; // Para quando 3 eventos forem adicionados
-          }
+            const date = new Date(today.getFullYear(), today.getMonth(), (week * 7) + dayOffsets[i]);
+            if (date >= today) {
+                upcomingEvents.push({ date: date.toLocaleDateString(), day: weekdays[i] });
+                if (upcomingEvents.length === 3) break; // Para quando 3 eventos forem adicionados
+            }
         }
         week++;
-      }
-      return upcomingEvents;
-    };
-  
+    }
+    return upcomingEvents;
+};
+
+const Programacao: React.FC = () => {
     const upcomingEventDates = getUpcomingDates(); // Gera as próximas datas
-  
+
     return (
-      <ProgramacaoContainer id="programacao">
-        <ContentWrapper>
-          <Title>PROGAMAÇÃO <Highlight>SEMANAL</Highlight></Title>
-          <Subtitle>Confira os eventos da semana ⚡</Subtitle>
-          <EventList>
-            {upcomingEventDates.map((event, index) => (
-              <EventCard key={index}>
-                <EventDate>{event.day} - {event.date}</EventDate>
-                <Flyer src={event.flyer} alt={`Flyer ${event.day}`} />
-                <ReserveButton href="#reserve">Reserve Aqui</ReserveButton>
-              </EventCard>
-            ))}
-          </EventList>
-        </ContentWrapper>
-      </ProgramacaoContainer>
+        <ProgramacaoContainer id="programacao">
+            <ContentWrapper>
+                <Title>PROGAMAÇÃO <Highlight>SEMANAL</Highlight></Title>
+                <Subtitle>Confira os eventos da semana  ⚡</Subtitle>
+                <EventList>
+                    {upcomingEventDates.map((event, index) => (
+                        <EventCard key={index}>
+                            <EventDate>{event.day} - {event.date}</EventDate>
+                            <Flyer src={`src/assets/teste-flyer.jpg`} alt={`Flyer ${event.day}`} />
+                            <ReserveButton href="#reserve">Reserve Aqui</ReserveButton>
+                        </EventCard>
+                    ))}
+                </EventList>
+            </ContentWrapper>
+        </ProgramacaoContainer>
     );
-  };
-  
-  export default Programacao;
+};
+
+export default Programacao;
