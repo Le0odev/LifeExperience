@@ -4,6 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import styled from 'styled-components';
 import Header from './Header';
+import axios from 'axios';
 
 const OuterContainer = styled.div`
   background-color: #000;
@@ -83,16 +84,11 @@ const ErrorMessage = styled.p`
   text-align: center;
   margin-top: 15px;
 `;
-
 const FlyerUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [eventName, setEventName] = useState<string>('');
-  const [selectedDay, setSelectedDay] = useState<string>('thursday');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [isUploading, setIsUploading] = useState(false);
-
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -100,51 +96,50 @@ const FlyerUpload: React.FC = () => {
     }
   };
 
-  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDay(e.target.value);
+  const handleUpload = async () => {
+    if (!file || !eventName) {
+      setError('Please provide a file and event name');
+      return;
+    }
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('flyer', file); // 'flyer' deve corresponder ao nome do campo no back-end
+    formData.append('name', eventName);
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload-flyer', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      console.log('Flyer uploaded successfully:', response.data);
+    } catch (error) {
+      console.error('Error uploading flyer:', error);
+      setError('Failed to upload flyer');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleUpload = async () => {
-  setIsUploading(true);
-  try {
-    const fileUrl = await uploadToStorage(file); // Função que faz o upload do arquivo
-    console.log("Upload bem-sucedido:", fileUrl);
-
-    await addDoc(collection(db, 'your-collection'), { flyer: fileUrl });
-    console.log("Documento adicionado com sucesso ao Firestore.");
-  } catch (error) {
-    console.error("Erro no upload ou ao adicionar ao Firestore:", error);
-    // Aqui você pode mostrar um alerta ou mensagem de erro para o usuário
-  } finally {
-    setIsUploading(false); // Sempre redefine o estado, independentemente do sucesso ou erro
-  }
-};
-
   return (
-    <OuterContainer>
-      <Container>
-        <Header />
-        <Title>Upload Flyer</Title>
-        <Input
-          type="text"
-          value={eventName}
-          onChange={(e) => setEventName(e.target.value)}
-          placeholder="Event Name"
-          required
-        />
-        <Select value={selectedDay} onChange={handleDayChange}>
-          <option value="thursday">Thursday</option>
-          <option value="friday">Friday</option>
-          <option value="saturday">Saturday</option>
-        </Select>
-        <Input type="file" onChange={handleFileChange} required />
-        <Button onClick={handleUpload} disabled={loading}>
-          {loading ? 'Uploading...' : 'Upload'}
-        </Button>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-      </Container>
-    </OuterContainer>
+    <div>
+      <h2>Upload Flyer</h2>
+      <input
+        type="text"
+        value={eventName}
+        onChange={(e) => setEventName(e.target.value)}
+        placeholder="Event Name"
+        required
+      />
+      <input type="file" onChange={handleFileChange} required />
+      <button onClick={handleUpload} disabled={loading}>
+        {loading ? 'Uploading...' : 'Upload'}
+      </button>
+      {error && <p>{error}</p>}
+    </div>
   );
-};
+};  
 
 export default FlyerUpload;

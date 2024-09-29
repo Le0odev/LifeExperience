@@ -86,7 +86,8 @@ const EventDate = styled.h3`
 const Flyer = styled.img`
     width: 100%;
     border-radius: 16px; /* Bordas arredondadas */
-    margin: 20px 0;
+    margin: 20px 0 25px;
+    
 
     &:hover {
         transform: scale(1); /* Ampliação suave no hover */
@@ -105,6 +106,7 @@ const ReserveButton = styled.a`
     font-size: 18px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3); /* Sombra do botão */
+    margin-top: 20px;
 
     &:hover {
         background-color: #e6b600;
@@ -118,6 +120,7 @@ const Subtitle = styled.p`
     margin-bottom: 20px;
     color: rgba(254, 207, 3, 0.85); /* Cor amarela com transparência */
     text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5); /* Leve sombra para destacar */
+
     
     @media (max-width: 768px) {
         font-size: 22px; /* Ajuste em telas menores */
