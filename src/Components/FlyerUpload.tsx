@@ -224,7 +224,7 @@ const FlyerUpload: React.FC = () => {
       formData.append('name', eventName);
       formData.append('day', selectedDay);
 
-      await axios.post('http://localhost:5000/upload-flyer', formData, {
+      await axios.post('https:backendlife-production.up.railway.app/upload-flyer', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -242,7 +242,7 @@ const FlyerUpload: React.FC = () => {
       setSuccess(true);
       setEventName('');
       setFile(null);
-      setSelectedDay('quinta-feira'); // Resetar para o dia padrão
+      setSelectedDay('quinta'); // Resetar para o dia padrão
     } catch (error) {
       setError('Erro ao enviar o arquivo.');
     } finally {
@@ -276,8 +276,8 @@ const FlyerUpload: React.FC = () => {
         <Title>Envio de Flyers</Title>
         <Input type="text" value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="Nome do Evento" />
         <Select value={selectedDay} onChange={handleDayChange}>
-          <option value="quinta-feira">Quinta-feira</option>
-          <option value="sexta-feira">Sexta-feira</option>
+          <option value="quinta">Quinta</option>
+          <option value="sexta">Sexta</option>
           <option value="sábado">Sábado</option>
         </Select>
         <Input type="file" onChange={handleFileChange} />

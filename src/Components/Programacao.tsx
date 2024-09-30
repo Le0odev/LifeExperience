@@ -31,7 +31,7 @@ const Title = styled.h2`
 const EventList = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: px;
+    margin-top: 40px;
     gap: 40px;
     margin-bottom: 0px;
 
@@ -70,7 +70,7 @@ const EventDate = styled.h3`
     font-weight: bold;
     color: #fecf03;
     letter-spacing: 1px;
-    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.8);
+    text-shadow: 1px 1px 2px rgba(254, 207, 3, 0.8);
     text-transform: uppercase;
     background: linear-gradient(90deg, rgba(254, 207, 3, 0.8), rgba(255, 255, 255, 0.2));
     -webkit-background-clip: text;
@@ -97,13 +97,12 @@ const ReserveButton = styled.a`
     font-weight: bold;
     font-size: 18px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3);
-    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3); /* Sombra do botão */
 
     &:hover {
         background-color: #e6b600;
-        transform: translateY(-6px);
-        box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5);
+        transform: translateY(-6px); /* Elevação do botão no hover */
+        box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5); /* Sombra mais intensa no hover */
     }
 `;
 
@@ -119,115 +118,148 @@ const Subtitle = styled.p`
     }
 `;
 
-const Highlight = styled.span`
-    color: #e6b600;
-    font-size: 3.5rem;
-
-    @media (max-width: 768px) {
-        font-size: 32px;
-    }
+const NoEvents = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8d7da; /* Cor de fundo suave */
+    color: #721c24; /* Cor do texto */
+    border: 1px solid #f5c6cb; /* Borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 1.2em; /* Tamanho da fonte */
+    text-align: center;
+    margin: 20px; /* Espaçamento em torno do componente */
 `;
 
 
 interface Flyer {
     url: string; // URL da imagem
     day: string; // Dia da semana correspondente
-    dateAdded: string; // Data em que a imagem foi adicionada (ou timestamp)
-  }
-  
-  const Programacao: React.FC = () => {
+    createdAt: number; // Timestamp da criação
+}
+
+const Programacao: React.FC = () => {
     const [flyers, setFlyers] = useState<Flyer[]>([]);
-  
+    const [mockDate, setMockDate] = useState<Date | null>(null); // Adicionando mockDate
+
+    const daysInOrder = ['quinta', 'sexta', 'sábado'];
+
     const fetchFlyers = async (day: string) => {
-      try {
-        const response = await fetch(`http://localhost:5000/flyers/${day}`);
-        const data: Flyer[] = await response.json();
-  
-        console.log('Dados recebidos:', data); // Log da resposta do servidor
-  
-        // Atualiza o estado, mantendo apenas o flyer mais recente por dia
-        setFlyers(prevFlyers => {
-          const updatedFlyers = [...prevFlyers];
-          data.forEach(newFlyer => {
-            const existingIndex = updatedFlyers.findIndex(f => f.day === newFlyer.day);
-            if (existingIndex > -1) {
-              // Substitui o flyer existente se o novo for mais recente
-              if (new Date(newFlyer.dateAdded) > new Date(updatedFlyers[existingIndex].dateAdded)) {
-                updatedFlyers[existingIndex] = newFlyer;
-              }
-            } else {
-              // Adiciona novo flyer se não existir
-              updatedFlyers.push(newFlyer);
-            }
-          });
-          return updatedFlyers;
-        });
-      } catch (error) {
-        console.error('Error fetching flyers:', error);
-      }
-    };
-  
-    useEffect(() => {
-      // Carrega os flyers ao montar o componente
-      fetchFlyers('quinta-feira');
-      fetchFlyers('sexta-feira');
-      fetchFlyers('sábado');
-  
-      // Configura o polling para atualizar os flyers a cada 10 segundos
-      const interval = setInterval(() => {
-        fetchFlyers('quinta-feira');
-        fetchFlyers('sexta-feira');
-        fetchFlyers('sábado');
-      }, 10000); // 10 segundos
-  
-      // Limpeza do intervalo ao desmontar o componente
-      return () => clearInterval(interval);
-    }, []);
-  
-    // Função para obter os flyers mais recentes por dia
-    const getRecentFlyersByDay = () => {
-      const recentFlyers: { [key: string]: Flyer } = {};
-      flyers.forEach(flyer => {
-        // Verifica se já temos um flyer para este dia ou se o atual é mais recente
-        if (!recentFlyers[flyer.day] || new Date(flyer.dateAdded) > new Date(recentFlyers[flyer.day].dateAdded)) {
-          recentFlyers[flyer.day] = flyer;
+        try {
+            const response = await fetch(`https://backendlife-production.up.railway.app/flyers/${day}`);
+            const data: Flyer[] = await response.json();
+
+            console.log(`Dados recebidos para ${day}:`, data); // Log dos dados recebidos por dia
+
+            setFlyers(prevFlyers => {
+                const updatedFlyers = prevFlyers.filter(f => f.day !== day);
+                return [...updatedFlyers, ...data];
+            });
+        } catch (error) {
+            console.error('Error fetching flyers:', error);
         }
-      });
-      return recentFlyers;
     };
-  
+
+    useEffect(() => {
+        daysInOrder.forEach(day => fetchFlyers(day));
+        const interval = setInterval(() => {
+            daysInOrder.forEach(day => fetchFlyers(day));
+        }, 90000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    // Lógica para verificar se os eventos devem ser exibidos
+    const shouldDisplayEvents = () => {
+        const now = mockDate || new Date(); // Usar mockDate se estiver definido
+        const currentDay = now.getDay();
+        return currentDay < 6; // Exibe eventos se não for domingo
+    };
+
+    const isEventPassed = (day: string): boolean => {
+        const now = new Date();
+        const dayOfWeek = now.getDay(); // 0 = domingo, 1 = segunda, ..., 6 = sábado
+        const days: { [key: string]: number } = {
+            'quinta': 4,
+            'sexta': 5,
+            'sábado': 6,
+        };
+
+        return days[day] < dayOfWeek; // Se o dia do flyer já passou, retorna true
+    };
+
+    // Função para obter os flyers mais recentes por dia, mantendo a ordem dos dias
+    const getRecentFlyersByDay = () => {
+        const recentFlyers: { [key: string]: Flyer } = {};
+
+        flyers.forEach(flyer => {
+            if (!recentFlyers[flyer.day] || flyer.createdAt > recentFlyers[flyer.day].createdAt) {
+                recentFlyers[flyer.day] = flyer;
+            }
+        });
+
+        // Mantém a ordem dos dias e remove os flyers de dias que já passaram
+        return daysInOrder.reduce((acc, day) => {
+            if (recentFlyers[day] && !isEventPassed(day)) {
+                acc[day] = recentFlyers[day];
+            }
+            return acc;
+        }, {} as { [key: string]: Flyer });
+    };
+
+    // Função para obter as datas correspondentes aos dias da semana
+    const getDatesForDays = () => {
+        const now = new Date();
+        const dayOfWeek = now.getDay();
+        const dates: { [key: string]: string } = {};
+
+        const days: { [key: string]: number } = {
+            'quinta': 4,
+            'sexta': 5,
+            'sábado': 6,
+        };
+
+        for (const [day, value] of Object.entries(days)) {
+            const diff = value - dayOfWeek;
+            const eventDate = new Date(now);
+            eventDate.setDate(now.getDate() + diff);
+
+            dates[day] = `${String(eventDate.getDate()).padStart(2, '0')}/${String(eventDate.getMonth() + 1).padStart(2, '0')}/${eventDate.getFullYear()}`;
+        }
+
+        return dates;
+    };
+
     const recentFlyers = getRecentFlyersByDay();
-  
-    // Definindo a ordem dos dias da semana
-    const daysOfWeek = ['quinta-feira', 'sexta-feira', 'sábado'];
-  
-    // Obter os dias da semana e as imagens mais recentes
-    const upcomingEventDates = daysOfWeek.map(day => ({
-      day,
-      flyer: recentFlyers[day],
-    }));
-  
+    const dates = getDatesForDays();
+
+    // Verifica se não há mais eventos futuros
+    const hasUpcomingEvents = Object.keys(recentFlyers).length > 0;
+
     return (
-      <ProgramacaoContainer id="programacao">
-        <ContentWrapper>
-          <Title>PROGAMAÇÃO <Highlight>SEMANAL</Highlight></Title>
-          <Subtitle>Confira os eventos da semana ⚡</Subtitle>
-          <EventList>
-            {upcomingEventDates.map((event, index) => (
-              <EventCard key={index}>
-                <EventDate>{event.day.charAt(0).toUpperCase() + event.day.slice(1)}</EventDate> {/* Formata a primeira letra para maiúscula */}
-                {event.flyer ? (
-                  <Flyer src={event.flyer.url} alt={`Flyer para ${event.day}`} />
+        <ProgramacaoContainer id='programacao'>
+            <ContentWrapper>
+                <Title>Programação Semanal</Title>
+                <Subtitle>Confira os eventos da semana ⚡</Subtitle>
+                {!hasUpcomingEvents ? (
+                    <NoEvents>Não há mais eventos nesta semana. Confira novamente na próxima semana!</NoEvents>
                 ) : (
-                  <div>No flyer available</div>
+                    <EventList>
+                        {Object.entries(recentFlyers).map(([day, flyer]) => (
+                            <EventCard key={day}>
+                                <EventDate>{`${day} - ${dates[day]}`}</EventDate>
+                                <Flyer src={flyer.url} alt={`Flyer for ${day}`} />
+                                <ReserveButton href="#">RESERVE AQUI</ReserveButton>
+                            </EventCard>
+                        ))}
+                    </EventList>
                 )}
-                <ReserveButton href="#reserve">Reserve Aqui</ReserveButton>
-              </EventCard>
-            ))}
-          </EventList>
-        </ContentWrapper>
-      </ProgramacaoContainer>
+                
+            </ContentWrapper>
+        </ProgramacaoContainer>
     );
-  };
-  
-  export default Programacao;
+};
+
+export default Programacao;
+
