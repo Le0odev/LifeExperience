@@ -141,8 +141,7 @@ interface Flyer {
 
 const Programacao: React.FC = () => {
     const [flyers, setFlyers] = useState<Flyer[]>([]);
-    const [mockDate, setMockDate] = useState<Date | null>(null); // Adicionando mockDate
-
+    
     const daysInOrder = ['quinta', 'sexta', 'sábado'];
 
     const fetchFlyers = async (day: string) => {
@@ -162,20 +161,15 @@ const Programacao: React.FC = () => {
     };
 
     useEffect(() => {
+        // Apenas busca flyers para os dias restantes da semana
         daysInOrder.forEach(day => fetchFlyers(day));
+
         const interval = setInterval(() => {
             daysInOrder.forEach(day => fetchFlyers(day));
-        }, 90000);
+        }, 90000); // 90 segundos
 
         return () => clearInterval(interval);
     }, []);
-
-    // Lógica para verificar se os eventos devem ser exibidos
-    const shouldDisplayEvents = () => {
-        const now = mockDate || new Date(); // Usar mockDate se estiver definido
-        const currentDay = now.getDay();
-        return currentDay < 6; // Exibe eventos se não for domingo
-    };
 
     const isEventPassed = (day: string): boolean => {
         const now = new Date();
@@ -255,7 +249,6 @@ const Programacao: React.FC = () => {
                         ))}
                     </EventList>
                 )}
-                
             </ContentWrapper>
         </ProgramacaoContainer>
     );
