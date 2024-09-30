@@ -1,94 +1,202 @@
-import React, { useState } from 'react';
-import { storage, db } from '../Config/firebase'; // Certifique-se de que o Firebase esteja configurado corretamente
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc } from 'firebase/firestore';
-import styled from 'styled-components';
-import Header from './Header';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styled, { keyframes } from 'styled-components';
+import Header from './Header';
+import HeaderAdmin from './HeaderAdmin';
 
+
+
+// Estilos do Container Principal
 const OuterContainer = styled.div`
   background-color: #000;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  
+    
+
 `;
 
 const Container = styled.div`
-  max-width: 600px;
+  max-width: 500px;
   width: 100%;
   padding: 40px;
-  border: 1px solid #f8c200;
-  border-radius: 8px;
-  background-color: #222;
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: linear-gradient(145deg, #1e1e1e, #111);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid #ffc107; /* Amarelo */
+  margin-bottom: 90px;
+
+  @media (max-width: 768px) {
+
+    margin-bottom: 100px;
+    }
 `;
 
+// Estilos dos Títulos e Entradas
 const Title = styled.h2`
-  color: #f8c200;
+  color: #ffc107; /* Amarelo */
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 28px;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 15px;
-  margin: 15px 0;
-  border: 1px solid #f8c200;
-  border-radius: 4px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid transparent;
   font-size: 18px;
   background-color: #333;
   color: #fff;
+  transition: all 0.3s ease;
 
   &:focus {
-    border-color: #f8c200;
+    border-color: #ffc107; /* Amarelo */
+    background-color: #444;
+    box-shadow: 0 0 5px #ffc107;
     outline: none;
-  }
-`;
-
-const Button = styled.button<{ disabled: boolean }>`
-  width: 100%;
-  padding: 15px;
-  background-color: ${({ disabled }) => (disabled ? '#555' : '#f8c200')};
-  color: #333;
-  border: none;
-  border-radius: 4px;
-  font-size: 18px;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: ${({ disabled }) => (disabled ? '#555' : '#d5a700')};
   }
 `;
 
 const Select = styled.select`
   width: 100%;
   padding: 15px;
-  margin: 15px 0;
-  border: 1px solid #f8c200;
-  border-radius: 4px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid transparent;
   font-size: 18px;
   background-color: #333;
   color: #fff;
   appearance: none;
+  transition: all 0.3s ease;
 
   &:focus {
-    border-color: #f8c200;
+    border-color: #ffc107; /* Amarelo */
+    background-color: #444;
+    box-shadow: 0 0 5px #ffc107;
     outline: none;
   }
+`;
+
+// Estilos do Botão
+const Button = styled.button<{ disabled: boolean }>`
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  background-color: ${({ disabled }) => (disabled ? '#555' : '#ffc107')}; /* Amarelo */
+  color: #000; /* Preto */
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4); /* Amarelo */
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${({ disabled }) => (disabled ? '#555' : '#e0a800')}; /* Amarelo mais escuro */
+    box-shadow: ${({ disabled }) =>
+      disabled ? 'none' : '0 6px 15px rgba(255, 193, 7, 0.6)'};
+  }
+`;
+
+// Estilos das Mensagens
+const SuccessMessage = styled.p`
+  color: #00ff7f;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
 `;
 
 const ErrorMessage = styled.p`
   color: red;
   text-align: center;
   margin-top: 15px;
+  font-weight: bold;
 `;
+
+// Estilos dos Logs
+const LogHistory = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  border: 0.5px solid #ffc107; /* Amarelo */
+  border-radius: 8px;
+  background-color: #222;
+  color: #fff;
+  text-align: left;
+  max-height: 300px; /* Aumentado para dar mais espaço */
+  overflow-y: auto;
+`;
+
+const LogEntry = styled.div`
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #333;
+  border-radius: 6px;
+`;
+
+const LogText = styled.p`
+  font-size: 14px;
+  color: #fff;
+  margin: 0;
+  word-wrap: break-word;
+`;
+
+// Estilos da Paginação
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const PaginationButton = styled.button`
+  margin: 0 5px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #ffc107; /* Amarelo */
+  color: #000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e0a800; /* Amarelo mais escuro */
+  }
+`;
+
+const PageInfo = styled.p`
+  color: #ffc107; /* Amarelo */
+  margin: 0 15px;
+  align-self: center;
+`;
+
+// Componente Principal
 const FlyerUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [eventName, setEventName] = useState<string>('');
+  const [selectedDay, setSelectedDay] = useState<string>('quinta-feira');
   const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [uploadDate, setUploadDate] = useState<string | null>(null);
   const [error, setError] = useState<string>('');
+  const [logs, setLogs] = useState<{ eventName: string; selectedDay: string; date: string }[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 3;
+
+  // Carregar logs do local storage ao montar o componente
+  useEffect(() => {
+    const storedLogs = localStorage.getItem('uploadLogs');
+    if (storedLogs) {
+      setLogs(JSON.parse(storedLogs));
+    }
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -96,50 +204,105 @@ const FlyerUpload: React.FC = () => {
     }
   };
 
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDay(e.target.value);
+  };
+
   const handleUpload = async () => {
     if (!file || !eventName) {
-      setError('Please provide a file and event name');
+      setError('Por favor, preencha todas as informações.');
       return;
     }
 
     setLoading(true);
-    const formData = new FormData();
-    formData.append('flyer', file); // 'flyer' deve corresponder ao nome do campo no back-end
-    formData.append('name', eventName);
+    setError('');
+    setSuccess(false);
 
     try {
-      const response = await axios.post('http://localhost:5000/upload-flyer', formData, {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('name', eventName);
+      formData.append('day', selectedDay);
+
+      await axios.post('http://localhost:5000/upload-flyer', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      console.log('Flyer uploaded successfully:', response.data);
+      const currentDate = new Date().toLocaleString('pt-BR');
+      setUploadDate(currentDate);
+
+      // Adicionar log
+      const newLog = { eventName, selectedDay, date: currentDate };
+      const updatedLogs = [...logs, newLog];
+      setLogs(updatedLogs);
+      localStorage.setItem('uploadLogs', JSON.stringify(updatedLogs));
+
+      setSuccess(true);
+      setEventName('');
+      setFile(null);
+      setSelectedDay('quinta-feira'); // Resetar para o dia padrão
     } catch (error) {
-      console.error('Error uploading flyer:', error);
-      setError('Failed to upload flyer');
+      setError('Erro ao enviar o arquivo.');
     } finally {
       setLoading(false);
     }
   };
 
+  // Páginação
+  const indexOfLastLog = currentPage * itemsPerPage;
+  const indexOfFirstLog = indexOfLastLog - itemsPerPage;
+  const currentLogs = logs.slice(indexOfFirstLog, indexOfLastLog);
+  const totalPages = Math.ceil(logs.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
-    <div>
-      <h2>Upload Flyer</h2>
-      <input
-        type="text"
-        value={eventName}
-        onChange={(e) => setEventName(e.target.value)}
-        placeholder="Event Name"
-        required
-      />
-      <input type="file" onChange={handleFileChange} required />
-      <button onClick={handleUpload} disabled={loading}>
-        {loading ? 'Uploading...' : 'Upload'}
-      </button>
-      {error && <p>{error}</p>}
-    </div>
+    <>
+    <HeaderAdmin />
+    <OuterContainer>
+      <Container>
+        <Title>Envio de Flyers</Title>
+        <Input type="text" value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="Nome do Evento" />
+        <Select value={selectedDay} onChange={handleDayChange}>
+          <option value="quinta-feira">Quinta-feira</option>
+          <option value="sexta-feira">Sexta-feira</option>
+          <option value="sábado">Sábado</option>
+        </Select>
+        <Input type="file" onChange={handleFileChange} />
+        <Button disabled={loading} onClick={handleUpload}>
+          {loading ? 'Enviando...' : 'Enviar Flyer'}
+        </Button>
+        {success && <SuccessMessage>Flyer enviado com sucesso!</SuccessMessage>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <LogHistory>
+          {currentLogs.map((log, index) => (
+            <LogEntry key={index}>
+              <LogText>{`Evento: ${log.eventName}, ${log.selectedDay}, ${log.date}`}</LogText>
+            </LogEntry>
+          ))}
+        </LogHistory>
+        <PaginationContainer>
+          <PaginationButton onClick={handlePrevPage} disabled={currentPage === 1}>Anterior</PaginationButton>
+          <PageInfo>{`Página ${currentPage} de ${totalPages}`}</PageInfo>
+          <PaginationButton onClick={handleNextPage} disabled={currentPage === totalPages}>Próximo</PaginationButton>
+        </PaginationContainer>
+      </Container>
+    </OuterContainer>
+    </>
+    
   );
-};  
+};
 
 export default FlyerUpload;

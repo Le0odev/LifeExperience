@@ -1,25 +1,21 @@
-// src/components/Programacao.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const ProgramacaoContainer = styled.section`
     padding: 60px 20px;
-    background-color: #000000; /* Cor de fundo */
-    color: #fecf03; /* Cor do texto */
+    background-color: #000000;
+    color: #fecf03;
     text-align: center;
-    height: auto; /* Ajuste automático da altura */
     height: 100vh;
 
-     @media (max-width: 768px) {
-    margin: 0 auto;
-    height: 100%
+    @media (max-width: 768px) {
+        margin: 0 auto;
+        height: 100%;
     }
-
 `;
 
-
 const ContentWrapper = styled.div`
-    margin-top: 55px; /* Espaço acima do conteúdo */
+    margin-top: 55px;
 `;
 
 const Title = styled.h2`
@@ -29,40 +25,37 @@ const Title = styled.h2`
 
     @media (max-width: 768px) {
         font-size: 2rem;
-     }
-    
+    }
 `;
 
 const EventList = styled.div`
     display: flex;
-    justify-content: center; /* Distribui as colunas */
+    justify-content: center;
     margin-top: px;
     gap: 40px;
     margin-bottom: 0px;
 
     @media (max-width: 768px) {
-    margin: 0 auto;
-    flex-wrap: wrap; /* Permite que as colunas se ajustem em telas menores */
-
-     }
-
+        margin: 0 auto;
+        flex-wrap: wrap;
+    }
 `;
 
 const EventCard = styled.div`
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Gradiente suave de vidro */
-    border: 1px solid rgba(254, 207, 3, 0.3); /* Borda amarela com transparência */
-    border-radius: 20px; /* Bordas bem arredondadas */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(254, 207, 3, 0.3);
+    border-radius: 20px;
     padding: 30px;
     margin: 15px;
     width: 40%;
     max-width: 350px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); /* Sombras externas e internas */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.3); /* Fundo com mais transparência no hover */
-        transform: translateY(-12px); /* Elevação maior no hover */
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 3px 3px rgba(255, 255, 255, 0.3); /* Sombras mais profundas no hover */
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 3px 3px rgba(255, 255, 255, 0.3);
     }
 
     @media (max-width: 768px) {
@@ -77,21 +70,20 @@ const EventDate = styled.h3`
     font-weight: bold;
     color: #fecf03;
     letter-spacing: 1px;
-    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.8); /* Brilho maior */
+    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.8);
     text-transform: uppercase;
-    background: linear-gradient(90deg, rgba(254, 207, 3, 0.8), rgba(255, 255, 255, 0.2)); /* Gradiente para um brilho extra */
+    background: linear-gradient(90deg, rgba(254, 207, 3, 0.8), rgba(255, 255, 255, 0.2));
     -webkit-background-clip: text;
 `;
 
 const Flyer = styled.img`
     width: 100%;
-    border-radius: 16px; /* Bordas arredondadas */
+    border-radius: 16px;
     margin: 20px 0 25px;
-    
 
     &:hover {
-        transform: scale(1); /* Ampliação suave no hover */
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra mais intensa no hover */
+        transform: scale(1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
 `;
 
@@ -105,82 +97,137 @@ const ReserveButton = styled.a`
     font-weight: bold;
     font-size: 18px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3); /* Sombra do botão */
+    box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3);
     margin-top: 20px;
 
     &:hover {
         background-color: #e6b600;
-        transform: translateY(-6px); /* Elevação do botão no hover */
-        box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5); /* Sombra mais intensa no hover */
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5);
     }
 `;
 
 const Subtitle = styled.p`
     font-size: 28px;
     margin-bottom: 20px;
-    color: rgba(254, 207, 3, 0.85); /* Cor amarela com transparência */
-    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5); /* Leve sombra para destacar */
+    color: rgba(254, 207, 3, 0.85);
+    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
 
-    
     @media (max-width: 768px) {
-        font-size: 22px; /* Ajuste em telas menores */
+        font-size: 22px;
         margin-bottom: 20px;
     }
 `;
 
-
 const Highlight = styled.span`
-    color: #e6b600; /* Cor de destaque para a palavra CONCEITO */
-    font-size: 3.5rempx; /* Tamanho maior para destaque */
+    color: #e6b600;
+    font-size: 3.5rem;
 
-    /* Responsividade para a palavra em destaque */
     @media (max-width: 768px) {
-        font-size: 32px; /* Tamanho em telas menores */
+        font-size: 32px;
     }
 `;
 
 
-// Função para gerar as próximas datas
-const getUpcomingDates = () => {
-    const today = new Date();
-    const upcomingEvents = [];
-    const weekdays = ['Quinta', 'Sexta', 'Sábado'];
-    const dayOffsets = [4, 5, 6]; // 4: Quinta, 5: Sexta, 6: Sábado
-    let week = 0;
-
-    while (upcomingEvents.length < 3) {
-        for (let i = 0; i < dayOffsets.length; i++) {
-            const date = new Date(today.getFullYear(), today.getMonth(), (week * 7) + dayOffsets[i]);
-            if (date >= today) {
-                upcomingEvents.push({ date: date.toLocaleDateString(), day: weekdays[i] });
-                if (upcomingEvents.length === 3) break; // Para quando 3 eventos forem adicionados
+interface Flyer {
+    url: string; // URL da imagem
+    day: string; // Dia da semana correspondente
+    dateAdded: string; // Data em que a imagem foi adicionada (ou timestamp)
+  }
+  
+  const Programacao: React.FC = () => {
+    const [flyers, setFlyers] = useState<Flyer[]>([]);
+  
+    const fetchFlyers = async (day: string) => {
+      try {
+        const response = await fetch(`http://localhost:5000/flyers/${day}`);
+        const data: Flyer[] = await response.json();
+  
+        console.log('Dados recebidos:', data); // Log da resposta do servidor
+  
+        // Atualiza o estado, mantendo apenas o flyer mais recente por dia
+        setFlyers(prevFlyers => {
+          const updatedFlyers = [...prevFlyers];
+          data.forEach(newFlyer => {
+            const existingIndex = updatedFlyers.findIndex(f => f.day === newFlyer.day);
+            if (existingIndex > -1) {
+              // Substitui o flyer existente se o novo for mais recente
+              if (new Date(newFlyer.dateAdded) > new Date(updatedFlyers[existingIndex].dateAdded)) {
+                updatedFlyers[existingIndex] = newFlyer;
+              }
+            } else {
+              // Adiciona novo flyer se não existir
+              updatedFlyers.push(newFlyer);
             }
+          });
+          return updatedFlyers;
+        });
+      } catch (error) {
+        console.error('Error fetching flyers:', error);
+      }
+    };
+  
+    useEffect(() => {
+      // Carrega os flyers ao montar o componente
+      fetchFlyers('quinta-feira');
+      fetchFlyers('sexta-feira');
+      fetchFlyers('sábado');
+  
+      // Configura o polling para atualizar os flyers a cada 10 segundos
+      const interval = setInterval(() => {
+        fetchFlyers('quinta-feira');
+        fetchFlyers('sexta-feira');
+        fetchFlyers('sábado');
+      }, 10000); // 10 segundos
+  
+      // Limpeza do intervalo ao desmontar o componente
+      return () => clearInterval(interval);
+    }, []);
+  
+    // Função para obter os flyers mais recentes por dia
+    const getRecentFlyersByDay = () => {
+      const recentFlyers: { [key: string]: Flyer } = {};
+      flyers.forEach(flyer => {
+        // Verifica se já temos um flyer para este dia ou se o atual é mais recente
+        if (!recentFlyers[flyer.day] || new Date(flyer.dateAdded) > new Date(recentFlyers[flyer.day].dateAdded)) {
+          recentFlyers[flyer.day] = flyer;
         }
-        week++;
-    }
-    return upcomingEvents;
-};
-
-const Programacao: React.FC = () => {
-    const upcomingEventDates = getUpcomingDates(); // Gera as próximas datas
-
+      });
+      return recentFlyers;
+    };
+  
+    const recentFlyers = getRecentFlyersByDay();
+  
+    // Definindo a ordem dos dias da semana
+    const daysOfWeek = ['quinta-feira', 'sexta-feira', 'sábado'];
+  
+    // Obter os dias da semana e as imagens mais recentes
+    const upcomingEventDates = daysOfWeek.map(day => ({
+      day,
+      flyer: recentFlyers[day],
+    }));
+  
     return (
-        <ProgramacaoContainer id="programacao">
-            <ContentWrapper>
-                <Title>PROGAMAÇÃO <Highlight>SEMANAL</Highlight></Title>
-                <Subtitle>Confira os eventos da semana  ⚡</Subtitle>
-                <EventList>
-                    {upcomingEventDates.map((event, index) => (
-                        <EventCard key={index}>
-                            <EventDate>{event.day} - {event.date}</EventDate>
-                            <Flyer src={`src/assets/teste-flyer.jpg`} alt={`Flyer ${event.day}`} />
-                            <ReserveButton href="#reserve">Reserve Aqui</ReserveButton>
-                        </EventCard>
-                    ))}
-                </EventList>
-            </ContentWrapper>
-        </ProgramacaoContainer>
+      <ProgramacaoContainer id="programacao">
+        <ContentWrapper>
+          <Title>PROGAMAÇÃO <Highlight>SEMANAL</Highlight></Title>
+          <Subtitle>Confira os eventos da semana ⚡</Subtitle>
+          <EventList>
+            {upcomingEventDates.map((event, index) => (
+              <EventCard key={index}>
+                <EventDate>{event.day.charAt(0).toUpperCase() + event.day.slice(1)}</EventDate> {/* Formata a primeira letra para maiúscula */}
+                {event.flyer ? (
+                  <Flyer src={event.flyer.url} alt={`Flyer para ${event.day}`} />
+                ) : (
+                  <div>No flyer available</div>
+                )}
+                <ReserveButton href="#reserve">Reserve Aqui</ReserveButton>
+              </EventCard>
+            ))}
+          </EventList>
+        </ContentWrapper>
+      </ProgramacaoContainer>
     );
-};
-
-export default Programacao;
+  };
+  
+  export default Programacao;
