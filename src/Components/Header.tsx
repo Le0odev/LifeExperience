@@ -28,7 +28,8 @@ const LogoContainer = styled.div`
 const LogoImage = styled.img`
     width: 50px;
     height: auto;
-    margin-right: 10px;
+    margin-right: 5px;
+    border-radius: 50%;
 `;
 
 const LogoText = styled.h1`
@@ -179,7 +180,8 @@ const Header: React.FC = () => {
         <HeaderContainer>
             <ContentWrapper>
                 <LogoContainer>
-                    <LogoImage src="src/assets/logo-life.png" alt="Logo" />
+                <LogoImage src="src/assets/logo-life.png" alt="Logo" />
+
                     <LogoText>Life Experience</LogoText>
                 </LogoContainer>
                 <Nav>

@@ -10,6 +10,7 @@ import FlyerUpload from './Components/FlyerUpload.tsx';
 import Login from './Components/Login.tsx'; // Certifique-se de que este import está correto
 import { auth } from './Config/firebase'; // Importe o auth do Firebase
 import { onAuthStateChanged } from 'firebase/auth'; // Importe a função para monitorar mudanças de autenticação
+import Life from './Components/Life.tsx';
 
 // Componente para renderizar Header, Home e Programacao com base na localização
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
         <>
           <Header />
           <Home />
+          <Life />
           <Programacao />
         </>
       )}
