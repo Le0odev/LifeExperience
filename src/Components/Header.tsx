@@ -82,7 +82,7 @@ const Nav = styled.nav`
     }
 `;
 
-const Hamburger = styled.div<{ isOpen: boolean }>`
+const Hamburger = styled.button<{ isOpen: boolean }>`
     display: none;
     flex-direction: column;
     justify-content: space-around;
@@ -117,14 +117,15 @@ const Hamburger = styled.div<{ isOpen: boolean }>`
 `;
 
 const MobileNav = styled.nav<{ isOpen: boolean }>`
-    display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
     position: absolute;
-    margin-top: 10px;
     top: 60px;
     right: 0;
     width: 100%;
-    text-align: center;
-
+    opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+    transform: ${({ isOpen }) => (isOpen ? 'scaleY(1)' : 'scaleY(0)')};
+    transform-origin: top; /* Origin no topo para animação */
+    transition: opacity 0.4s ease, transform 0.4s ease; /* Aumentar duração da transição */
+    
     ul {
         list-style: none;
         padding: 0;
@@ -156,7 +157,7 @@ const Header: React.FC = () => {
     useEffect(() => {
         const sections = document.querySelectorAll('section');
         const options = {
-            threshold: 0.5,
+            threshold: 0.1, // Alterar para 10% de visibilidade
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -180,8 +181,7 @@ const Header: React.FC = () => {
         <HeaderContainer>
             <ContentWrapper>
                 <LogoContainer>
-                <LogoImage src="src/assets/logo-life.png" alt="Logo" />
-
+                    <LogoImage src="src/assets/logo-life.png" alt="Logo" />
                     <LogoText>Life Experience</LogoText>
                 </LogoContainer>
                 <Nav>

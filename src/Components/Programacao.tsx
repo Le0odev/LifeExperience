@@ -7,10 +7,10 @@ const ProgramacaoContainer = styled.section`
     color: #fecf03;
     text-align: center;
     height: 100vh;
+    overflow: auto; // Para permitir rolagem em telas menores
 
     @media (max-width: 768px) {
-        margin: 0 auto;
-        height: 100%;
+        height: auto; // Ajustar a altura para auto em telas menores
     }
 `;
 
@@ -59,8 +59,8 @@ const EventCard = styled.div`
     }
 
     @media (max-width: 768px) {
-        width: 100%;
-        margin: 5px 0;
+        width: 90%; // Aumenta a largura em dispositivos menores
+        margin: 10px 0;
     }
 `;
 
@@ -80,9 +80,10 @@ const Flyer = styled.img`
     width: 100%;
     border-radius: 16px;
     margin: 20px 0 25px;
+    transition: transform 0.3s ease;
 
     &:hover {
-        transform: scale(1);
+        transform: scale(1.05); // Leve aumento ao passar o mouse
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
 `;
@@ -97,12 +98,13 @@ const ReserveButton = styled.a`
     font-weight: bold;
     font-size: 18px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3); /* Sombra do botão */
+    box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3);
+    cursor: pointer; // Muda o cursor para indicar que é clicável
 
     &:hover {
         background-color: #e6b600;
-        transform: translateY(-6px); /* Elevação do botão no hover */
-        box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5); /* Sombra mais intensa no hover */
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5);
     }
 `;
 
@@ -123,34 +125,31 @@ const NoEvents = styled.div`
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: #f8d7da; /* Cor de fundo suave */
-    color: #721c24; /* Cor do texto */
-    border: 1px solid #f5c6cb; /* Borda */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 1.2em; /* Tamanho da fonte */
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    font-size: 1.2em;
     text-align: center;
-    margin: 20px; /* Espaçamento em torno do componente */
+    margin: 20px;
 `;
 
-
 interface Flyer {
-    url: string; // URL da imagem
-    day: string; // Dia da semana correspondente
-    createdAt: number; // Timestamp da criação
+    url: string;
+    day: string;
+    createdAt: number;
 }
 
 const Programacao: React.FC = () => {
     const [flyers, setFlyers] = useState<Flyer[]>([]);
-    
+
     const daysInOrder = ['quinta', 'sexta', 'sábado'];
 
     const fetchFlyers = async (day: string) => {
         try {
             const response = await fetch(`https://backendlife-production.up.railway.app/flyers/${day}`);
             const data: Flyer[] = await response.json();
-
-            console.log(`Dados recebidos para ${day}:`, data); // Log dos dados recebidos por dia
-
+            console.log(`Dados recebidos para ${day}:`, data);
             setFlyers(prevFlyers => {
                 const updatedFlyers = prevFlyers.filter(f => f.day !== day);
                 return [...updatedFlyers, ...data];
@@ -161,29 +160,27 @@ const Programacao: React.FC = () => {
     };
 
     useEffect(() => {
-        // Apenas busca flyers para os dias restantes da semana
         daysInOrder.forEach(day => fetchFlyers(day));
 
         const interval = setInterval(() => {
             daysInOrder.forEach(day => fetchFlyers(day));
-        }, 90000); // 90 segundos
+        }, 90000);
 
         return () => clearInterval(interval);
     }, []);
 
     const isEventPassed = (day: string): boolean => {
         const now = new Date();
-        const dayOfWeek = now.getDay(); // 0 = domingo, 1 = segunda, ..., 6 = sábado
+        const dayOfWeek = now.getDay();
         const days: { [key: string]: number } = {
             'quinta': 4,
             'sexta': 5,
             'sábado': 6,
         };
 
-        return days[day] < dayOfWeek; // Se o dia do flyer já passou, retorna true
+        return days[day] < dayOfWeek;
     };
 
-    // Função para obter os flyers mais recentes por dia, mantendo a ordem dos dias
     const getRecentFlyersByDay = () => {
         const recentFlyers: { [key: string]: Flyer } = {};
 
@@ -193,7 +190,6 @@ const Programacao: React.FC = () => {
             }
         });
 
-        // Mantém a ordem dos dias e remove os flyers de dias que já passaram
         return daysInOrder.reduce((acc, day) => {
             if (recentFlyers[day] && !isEventPassed(day)) {
                 acc[day] = recentFlyers[day];
@@ -202,7 +198,6 @@ const Programacao: React.FC = () => {
         }, {} as { [key: string]: Flyer });
     };
 
-    // Função para obter as datas correspondentes aos dias da semana
     const getDatesForDays = () => {
         const now = new Date();
         const dayOfWeek = now.getDay();
@@ -218,7 +213,6 @@ const Programacao: React.FC = () => {
             const diff = value - dayOfWeek;
             const eventDate = new Date(now);
             eventDate.setDate(now.getDate() + diff);
-
             dates[day] = `${String(eventDate.getDate()).padStart(2, '0')}/${String(eventDate.getMonth() + 1).padStart(2, '0')}/${eventDate.getFullYear()}`;
         }
 
@@ -227,8 +221,6 @@ const Programacao: React.FC = () => {
 
     const recentFlyers = getRecentFlyersByDay();
     const dates = getDatesForDays();
-
-    // Verifica se não há mais eventos futuros
     const hasUpcomingEvents = Object.keys(recentFlyers).length > 0;
 
     return (
@@ -237,14 +229,16 @@ const Programacao: React.FC = () => {
                 <Title>Programação Semanal</Title>
                 <Subtitle>Confira os eventos da semana ⚡</Subtitle>
                 {!hasUpcomingEvents ? (
-                    <NoEvents>Não há mais eventos nesta semana. Confira novamente na próxima semana!</NoEvents>
+                    <NoEvents>Não há mais eventos programados para essa semana!</NoEvents>
                 ) : (
                     <EventList>
                         {Object.entries(recentFlyers).map(([day, flyer]) => (
                             <EventCard key={day}>
-                                <EventDate>{`${day} - ${dates[day]}`}</EventDate>
-                                <Flyer src={flyer.url} alt={`Flyer for ${day}`} />
-                                <ReserveButton href="#">RESERVE AQUI</ReserveButton>
+                                <EventDate>{day.charAt(0).toUpperCase() + day.slice(1)} - {dates[day]}</EventDate>
+                                <Flyer src={flyer.url} alt={flyer.day} />
+                                <ReserveButton href={`https://wa.me/5598999999999?text=Olá, gostaria de reservar para o evento de ${day}!`} target="_blank">
+                                    Reservar
+                                </ReserveButton>
                             </EventCard>
                         ))}
                     </EventList>
@@ -255,4 +249,3 @@ const Programacao: React.FC = () => {
 };
 
 export default Programacao;
-

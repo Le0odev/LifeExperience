@@ -53,20 +53,21 @@ const Subtitle = styled.p`
     }
 `;
 
-const Button = styled.a`
-    background-color: #fecf03; /* Cor de fundo do botão */
-    color: #000000; /* Cor do texto do botão */
-    padding: 12px 22px; /* Espaçamento interno do botão */
+const Button = styled.button`
+    background-color: #ffcc00;
+    color: #000;
     border: none;
-    border-radius: 5px; /* Bordas arredondadas */
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 22px;
-    transition: background-color 0.3s ease; /* Transição suave */
-    
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+
     &:hover {
-        background-color: #e6b600; /* Cor de fundo do botão ao passar o mouse */
+      background-color: #e6b800; /* Cor mais escura ao passar o mouse */
     }
+  
 
     /* Responsividade para o botão */
     @media (max-width: 768px) {
@@ -80,7 +81,7 @@ const Home: React.FC = () => {
         <HomeContainer id="home">
             <Title>Viva essa <Highlight>experiência</Highlight> em Recife! 🛸 </Title>
             <Subtitle>Explore nossos serviços, tire suas dúvidas e reserve agora!</Subtitle>
-            <Button href="#events">RESERVE AQUI 👽 </Button>
+            <Button >RESERVE AQUI 👽 </Button>
         </HomeContainer>
     );
 };
