@@ -1,9 +1,6 @@
-  import { BsWhatsapp } from "react-icons/bs";
-  import { FaRocket, FaInstagram, FaFacebook, FaTwitter, FaWhatsapp, FaGoogle } from "react-icons/fa";
-import { FaMap } from "react-icons/fa6";
+  import { FaRocket } from "react-icons/fa";
   import { PiFlyingSaucerFill } from "react-icons/pi";
-import { SiGooglemaps, SiInstagram, SiWhatsapp } from "react-icons/si";
-import { TbBrandGoogleMaps } from "react-icons/tb";
+  import { SiGooglemaps, SiInstagram, SiWhatsapp } from "react-icons/si";
   import styled, { keyframes } from "styled-components";
 
   // Animação de fade-in
@@ -80,7 +77,7 @@ import { TbBrandGoogleMaps } from "react-icons/tb";
 
   const Icon = styled.span`
     margin-left: 10px;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: #ffcc00;
     margin-bottom: -5px;
   `;
@@ -114,7 +111,7 @@ import { TbBrandGoogleMaps } from "react-icons/tb";
 
   const SocialIcon = styled.a`
     color: #ffcc00;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     transition: color 0.3s;
     margin-left: 1px;
 
@@ -126,7 +123,7 @@ import { TbBrandGoogleMaps } from "react-icons/tb";
   const Life = () => {
     return (
       <Container id='life'>
-        <Image src='src/assets/LIFE 4.jpg' alt="Imagem da casa LIFE, um local vibrante e animado." />
+        <Image src='src/assets/LIFE-4.webp' alt="Imagem da casa LIFE, um local vibrante e animado." />
         <TextContainer>
           <AttractionsTitle>
             Life Experience

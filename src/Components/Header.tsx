@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
@@ -23,6 +23,7 @@ const ContentWrapper = styled.div`
 const LogoContainer = styled.div`
     display: flex;
     align-items: center;
+    gap: 5px;
 `;
 
 const LogoImage = styled.img`
@@ -117,31 +118,64 @@ const Hamburger = styled.button<{ isOpen: boolean }>`
 `;
 
 const MobileNav = styled.nav<{ isOpen: boolean }>`
-    position: absolute;
-    top: 60px;
+    position: fixed;
+    top: 0;
     right: 0;
-    width: 100%;
+    width: ${({ isOpen }) => (isOpen ? '100%' : '0')}; /* Menu de tela cheia */
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85); /* Fundo escuro, opacidade maior */
+    z-index: 9999;
+    transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
     opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-    transform: ${({ isOpen }) => (isOpen ? 'scaleY(1)' : 'scaleY(0)')};
-    transform-origin: top; /* Origin no topo para animação */
-    transition: opacity 0.4s ease, transform 0.4s ease; /* Aumentar duração da transição */
-    
+    pointer-events: ${({ isOpen }) => (isOpen ? 'auto' : 'none')}; /* Evita cliques quando fechado */
+
     ul {
         list-style: none;
         padding: 0;
         margin: 0;
+        text-align: center;
+        margin-bottom: 20px;
 
-        li {
-            margin: 10px 0;
+    }
+
+    li {
+        margin: 20px 0;
+        transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(20px)')};
+        transition: transform 0.5s ease, opacity 0.5s ease;
+        opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+    }
+
+    a {
+        color: #fecf03;
+        font-size: 1.7rem;
+        font-weight: 700; /* Aumentando o peso da fonte */
+        letter-spacing: 1px; /* Melhor espaçamento para leitura */
+        text-decoration: none;
+        transition: color 0.3s ease;
+        
+        &:hover {
+            color: #e6b800; /* Cor de hover */
         }
+    }
 
-        a {
-            color: #fecf03;
-            text-decoration: none;
-            font-weight: 600;
-            &:hover {
-                text-decoration: underline;
-            }
+    /* Ícone de fechar no topo direito */
+    .close-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 4rem;
+        color: #fecf03;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: rotate(90deg);
         }
     }
 `;
@@ -149,10 +183,34 @@ const MobileNav = styled.nav<{ isOpen: boolean }>`
 const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<string>('inicio');
+    const mobileNavRef = useRef<HTMLDivElement>(null); // Usar ref para detectar cliques fora
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+
+    const closeMenu = () => {
+        setIsOpen(false);
+    };
+
+    // Fechar o menu ao clicar fora
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (mobileNavRef.current && !mobileNavRef.current.contains(event.target as Node)) {
+                closeMenu();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         const sections = document.querySelectorAll('section');
@@ -198,14 +256,15 @@ const Header: React.FC = () => {
                     <div />
                     <div />
                 </Hamburger>
-                <MobileNav isOpen={isOpen}>
+                <MobileNav ref={mobileNavRef} isOpen={isOpen}>
                     <ul>
-                        <li><a href="#home" onClick={() => setIsOpen(false)}>Início</a></li>
-                        <li><a href="#life" onClick={() => setIsOpen(false)}>Life</a></li>
-                        <li><a href="#programacao" onClick={() => setIsOpen(false)}>Programação</a></li>
-                        <li><a href="#gallery" onClick={() => setIsOpen(false)}>Galeria</a></li>
-                        <li><a href="#contact" onClick={() => setIsOpen(false)}>Contato</a></li>
+                        <li><a href="#home" onClick={closeMenu}>Início</a></li>
+                        <li><a href="#life" onClick={closeMenu}>Life</a></li>
+                        <li><a href="#programacao" onClick={closeMenu}>Programação</a></li>
+                        <li><a href="#gallery" onClick={closeMenu}>Galeria</a></li>
+                        <li><a href="#contact" onClick={closeMenu}>Contato</a></li>
                     </ul>
+                    <div className="close-icon" onClick={closeMenu}>&times;</div>
                 </MobileNav>
             </ContentWrapper>
         </HeaderContainer>
