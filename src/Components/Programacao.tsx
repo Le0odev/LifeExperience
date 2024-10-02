@@ -111,7 +111,7 @@ const ReserveButton = styled.a`
 const Subtitle = styled.p`
     font-size: 28px;
     margin-bottom: 20px;
-    color: rgba(254, 207, 3, 0.85);
+    color: #ffffff;
     text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
 
     @media (max-width: 768px) {

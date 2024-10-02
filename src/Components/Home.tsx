@@ -39,6 +39,7 @@ const Highlight = styled.span`
 const Subtitle = styled.p`
     font-size: clamp(1.2rem, 2.5vw, 1.5rem); /* Tamanho responsivo */
     margin-bottom: 20px; /* Espaçamento abaixo do subtítulo */
+    
 `;
 
 // Botão de ação
