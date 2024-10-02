@@ -12,6 +12,7 @@ import { auth } from './Config/firebase'; // Importe o auth do Firebase
 import { onAuthStateChanged } from 'firebase/auth'; // Importe a função para monitorar mudanças de autenticação
 import Life from './Components/Life.tsx';
 import GallerySection from './Components/Gallery.tsx';
+import MidiaUpload from './Components/MidiaUpload.tsx';
 
 // Componente para renderizar Header, Home e Programacao com base na localização
 const App = () => {
@@ -29,7 +30,7 @@ const App = () => {
   return (
     <>
       {/* Renderiza apenas se não estiver na rota /admin */}
-      {location.pathname !== '/admin' && (
+      {location.pathname !== '/admin' && location.pathname !== '/admin/media' && (
         <>
           <Header />
           <Home />
@@ -39,8 +40,10 @@ const App = () => {
         </>
       )}
       <Routes>
-        <Route path="/admin" element={user ? <FlyerUpload /> : <Login setUser={setUser} />} /> {/* Rota para o painel administrativo */}
+        <Route path="/admin" element={user ? <FlyerUpload /> : <Login setUser={setUser} />} />
+        <Route path="/admin/media" element={user ? <MidiaUpload /> : <Login setUser={setUser} />} /> 
       </Routes>
+
     </>
   );
 };

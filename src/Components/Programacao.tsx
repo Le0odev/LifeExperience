@@ -16,6 +16,11 @@ const ProgramacaoContainer = styled.section`
 
 const ContentWrapper = styled.div`
     margin-top: 55px;
+
+    
+    @media (max-width: 768px) {
+    margin-top: 25px;
+    }
 `;
 
 const Title = styled.h2`

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css'; 
@@ -52,7 +52,7 @@ const GalleryItem = styled.div`
 
 const Media = styled.div`
     width: 100%;
-    height: 450px; // Altura do item do carrossel
+    height: 450px; 
     object-fit: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -126,18 +126,28 @@ const ReserveButton = styled.a`
 interface Event {
     title: string;
     date: string;
-    mediaUrl: string;
-    isVideo?: boolean; // Novo campo para indicar se o item é um vídeo
+    url: string;
+    isVideo?: boolean;
 }
 
-const pastEvents: Event[] = [
-    { title: 'Evento 1', date: '10/09/2024', mediaUrl: 'src/assets/gallery1.jpg' },
-    { title: 'Evento 2', date: '17/09/2024', mediaUrl: 'src/assets/gallery3.mp4', isVideo: true },
-    { title: 'Evento 3', date: '24/09/2024', mediaUrl: 'src/assets/gallery2.jpg' },
-    // Adicione mais eventos conforme necessário
-];
-
 const GallerySection: React.FC = () => {
+    const [events, setEvents] = useState<Event[]>([]);
+
+    // Função para buscar os eventos da API
+    const fetchEvents = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/gallery-media');
+            const data = await response.json();
+            setEvents(data);
+        } catch (error) {
+            console.error('Erro ao buscar eventos:', error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchEvents(); // Buscar os eventos ao carregar o componente
+    }, []);
+
     const settings = {
         infinite: true,
         speed: 500,
@@ -171,18 +181,18 @@ const GallerySection: React.FC = () => {
                 <SectionTitle>Galeria de Eventos Passados</SectionTitle>
                 <SectionSubtitle>Veja os melhores momentos dos nossos eventos anteriores!</SectionSubtitle>
                 <Slider {...settings}>
-                    {pastEvents.map((event) => (
+                    {events.map((event) => (
                         <GalleryItem key={event.title}>
                             <Media>
                                 {event.isVideo ? (
-                                    <Video src={event.mediaUrl} autoPlay loop muted />
+                                    <Video src={event.url} autoPlay loop muted />
                                 ) : (
-                                    <Image src={event.mediaUrl} alt={event.title} />
+                                    <Image src={event.url} alt={event.title} />
                                 )}
                             </Media>
                             <Overlay>
                                 <EventTitle>{event.title}</EventTitle>
-                                <EventDate>{event.date}</EventDate>
+                                <EventDate>{new Date(event.date).toLocaleDateString()}</EventDate>
                             </Overlay>
                         </GalleryItem>
                     ))}
@@ -193,4 +203,4 @@ const GallerySection: React.FC = () => {
     );
 };
 
-export default GallerySection;
+export default GallerySection

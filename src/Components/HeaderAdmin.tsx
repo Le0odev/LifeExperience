@@ -185,8 +185,16 @@ const HeaderAdmin: React.FC = () => {
                 </LogoContainer>
                 <Nav>
                     <ul>
-                        <li><a href="#home" className={activeSection === 'home' ? 'active' : ''}>Flyer Admins</a></li>
-                     
+                        <li>
+                            <a href="#home" className={activeSection === 'home' ? 'active' : ''}>
+                                Flyer Admins
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/media" className={activeSection === 'gallery' ? 'active' : ''}>
+                                Gallery Admins
+                            </a>
+                        </li>
                     </ul>
                 </Nav>
                 <Hamburger onClick={toggleMenu} isOpen={isOpen}>
@@ -196,10 +204,16 @@ const HeaderAdmin: React.FC = () => {
                 </Hamburger>
                 <MobileNav isOpen={isOpen}>
                     <ul>
-                        <li><a href="#home" onClick={() => setIsOpen(false)}>Início</a></li>
-                        <li><a href="#reports" onClick={() => setIsOpen(false)}>Relatórios</a></li>
-                        <li><a href="#settings" onClick={() => setIsOpen(false)}>Configurações</a></li>
-                        <li><a href="#users" onClick={() => setIsOpen(false)}>Usuários</a></li>
+                        <li>
+                            <a href="#home" onClick={() => setIsOpen(false)}>
+                                Flyer Admins
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/media" onClick={() => setIsOpen(false)}>
+                                Gallery Admins
+                            </a>
+                        </li>
                     </ul>
                 </MobileNav>
             </ContentWrapper>
