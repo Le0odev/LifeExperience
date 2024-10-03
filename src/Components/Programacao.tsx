@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+// Estilização do container principal
 const ProgramacaoContainer = styled.section`
     padding: 60px 20px;
     background-color: #000000;
@@ -14,15 +15,16 @@ const ProgramacaoContainer = styled.section`
     }
 `;
 
+// Wrapper para o conteúdo
 const ContentWrapper = styled.div`
     margin-top: 55px;
 
-    
     @media (max-width: 768px) {
-    margin-top: 45px;
+        margin-top: 45px;
     }
 `;
 
+// Título da programação
 const Title = styled.h2`
     font-size: 2.8rem;
     font-weight: 600;
@@ -30,10 +32,12 @@ const Title = styled.h2`
     letter-spacing: 0.05rem;
 
     @media (max-width: 768px) {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
     }
 `;
 
+// Estilização da lista de eventos
 const EventList = styled.div`
     display: flex;
     justify-content: center;
@@ -47,7 +51,9 @@ const EventList = styled.div`
     }
 `;
 
+// Estilização do card de eventos
 const EventCard = styled.div`
+    position: relative; // Adiciona position relativa para o overlay
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border: 1px solid rgba(254, 207, 3, 0.3);
     border-radius: 20px;
@@ -70,6 +76,7 @@ const EventCard = styled.div`
     }
 `;
 
+// Estilização da data do evento
 const EventDate = styled.h3`
     margin: 0;
     font-size: 26px;
@@ -80,8 +87,13 @@ const EventDate = styled.h3`
     text-transform: uppercase;
     background: linear-gradient(90deg, rgba(254, 207, 3, 0.8), rgba(255, 255, 255, 0.2));
     -webkit-background-clip: text;
+
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
 `;
 
+// Estilização do flyer
 const Flyer = styled.img`
     width: 100%;
     border-radius: 16px;
@@ -94,6 +106,20 @@ const Flyer = styled.img`
     }
 `;
 
+// Estilização do vídeo
+const Video = styled.video`
+    width: 100%;
+    border-radius: 16px;
+    margin: 20px 0 25px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.05); // Leve aumento ao passar o mouse
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+`;
+
+// Estilização do botão de reserva
 const ReserveButton = styled.a`
     background-color: #fecf03;
     color: #000000;
@@ -114,6 +140,7 @@ const ReserveButton = styled.a`
     }
 `;
 
+// Estilização do subtítulo
 const Subtitle = styled.p`
     font-size: 28px;
     margin-bottom: 20px;
@@ -121,11 +148,12 @@ const Subtitle = styled.p`
     text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
 
     @media (max-width: 768px) {
-        font-size: 22px;
+        font-size: 18px;
         margin-bottom: 20px;
     }
 `;
 
+// Estilização da mensagem de ausência de eventos
 const NoEvents = styled.div`
     display: flex;
     justify-content: center;
@@ -140,10 +168,34 @@ const NoEvents = styled.div`
     margin: 20px;
 `;
 
+// Componente Overlay
+const Overlay = styled.div<{ title: string }>`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    ${EventCard}:hover & {
+        opacity: 1;
+    }
+`;
+
+// Definição da interface para Flyers
 interface Flyer {
     url: string;
     day: string;
     createdAt: number;
+    isVideo?: boolean;
+    title: string;
 }
 
 const Programacao: React.FC = () => {
@@ -151,6 +203,7 @@ const Programacao: React.FC = () => {
 
     const daysInOrder = ['quinta', 'sexta', 'sábado'];
 
+    // Função para buscar os flyers por dia
     const fetchFlyers = async (day: string) => {
         try {
             const response = await fetch(`https://backendlife-production.up.railway.app/flyers/${day}`);
@@ -175,6 +228,7 @@ const Programacao: React.FC = () => {
         return () => clearInterval(interval);
     }, []);
 
+    // Função para verificar se o evento já ocorreu
     const isEventPassed = (day: string): boolean => {
         const now = new Date();
         const dayOfWeek = now.getDay();
@@ -187,6 +241,7 @@ const Programacao: React.FC = () => {
         return days[day] < dayOfWeek;
     };
 
+    // Função para obter os flyers mais recentes por dia
     const getRecentFlyersByDay = () => {
         const recentFlyers: { [key: string]: Flyer } = {};
 
@@ -196,59 +251,39 @@ const Programacao: React.FC = () => {
             }
         });
 
-        return daysInOrder.reduce((acc, day) => {
-            if (recentFlyers[day] && !isEventPassed(day)) {
-                acc[day] = recentFlyers[day];
-            }
-            return acc;
-        }, {} as { [key: string]: Flyer });
-    };
-
-    const getDatesForDays = () => {
-        const now = new Date();
-        const dayOfWeek = now.getDay();
-        const dates: { [key: string]: string } = {};
-
-        const days: { [key: string]: number } = {
-            'quinta': 4,
-            'sexta': 5,
-            'sábado': 6,
-        };
-
-        for (const [day, value] of Object.entries(days)) {
-            const diff = value - dayOfWeek;
-            const eventDate = new Date(now);
-            eventDate.setDate(now.getDate() + diff);
-            dates[day] = `${String(eventDate.getDate()).padStart(2, '0')}/${String(eventDate.getMonth() + 1).padStart(2, '0')}/${eventDate.getFullYear()}`;
-        }
-
-        return dates;
+        return recentFlyers;
     };
 
     const recentFlyers = getRecentFlyersByDay();
-    const dates = getDatesForDays();
-    const hasUpcomingEvents = Object.keys(recentFlyers).length > 0;
 
     return (
-        <ProgramacaoContainer id='programacao'>
+        <ProgramacaoContainer id='programacao'>  
+            <Title>Programação</Title>
+            <Subtitle>Não fique de fora! Veja os eventos que preparamos para você!</Subtitle>
             <ContentWrapper>
-                <Title>PROGRAMAÇÃO SEMANAL</Title>
-                <Subtitle>Confira os eventos da semana ⚡</Subtitle>
-                {!hasUpcomingEvents ? (
-                    <NoEvents>Não há mais eventos programados para essa semana!</NoEvents>
-                ) : (
-                    <EventList>
-                        {Object.entries(recentFlyers).map(([day, flyer]) => (
-                            <EventCard key={day}>
-                                <EventDate>{day.charAt(0).toUpperCase() + day.slice(1)} - {dates[day]}</EventDate>
-                                <Flyer src={flyer.url} alt={flyer.day} />
-                                <ReserveButton href={`https://wa.me/5598999999999?text=Olá, gostaria de reservar para o evento de ${day}!`} target="_blank">
-                                    Reservar
-                                </ReserveButton>
+                <EventList>
+                    {daysInOrder.map((day, index) => {
+                        const flyer = recentFlyers[day];
+
+                        return flyer ? (
+                            <EventCard key={index}>
+                                <EventDate>{day}</EventDate>
+                                {flyer.isVideo ? (
+                                    <Video src={flyer.url} autoPlay loop muted/>
+                                ) : (
+                                    <Flyer src={flyer.url} alt={flyer.title} />
+                                )}
+                                <Overlay title={flyer.title}>
+                                    
+                                </Overlay>
                             </EventCard>
-                        ))}
-                    </EventList>
-                )}
+                        ) : (
+                            <NoEvents key={index}>
+                                Nenhum evento programado para {day}.
+                            </NoEvents>
+                        );
+                    })}
+                </EventList>
             </ContentWrapper>
         </ProgramacaoContainer>
     );

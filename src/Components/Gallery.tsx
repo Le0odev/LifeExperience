@@ -10,13 +10,14 @@ const GalleryContainer = styled.section`
     text-align: center;
     background-color: #000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    height: 100vh;  
+    height: 100vh;
+    height: 100%;  
     display: block;
     flex-direction: column;
     justify-content: center;
 
      @media (max-width: 768px) {
-        display: block:
+        height: 100%
      }
 `;
 
@@ -26,19 +27,23 @@ const ContentWrapper = styled.div`
     margin-left: auto;
     margin-right: auto;
 
+     @media (max-width: 768px) {
+        margin-top: 45px;
+    }
   .slick-list {margin: 0 -7px;}
   .slick-slide>div {padding: 0 7px;}
 `;
 
 const SectionTitle = styled.h2`
     font-size: 2.8rem;
-    margin-bottom: x;
     font-weight: 600;
     color: rgba(254, 207, 3, 0.9);
     letter-spacing: 0.05rem;
 
     @media (max-width: 768px) {
-        font-size: 2rem;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+
     }
 `;
 
@@ -49,8 +54,8 @@ const SectionSubtitle = styled.p`
     text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
 
     @media (max-width: 768px) {
-        font-size: 22px;
-        margin-bottom: 50px;
+        font-size: 18px;
+        margin-bottom: 30px;
     }
 `;
 

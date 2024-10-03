@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import Header from './Header';
 import HeaderAdmin from './HeaderAdmin';
-
-
 
 // Estilos do Container Principal
 const OuterContainer = styled.div`
@@ -14,9 +12,6 @@ const OuterContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px;
-  
-    
-
 `;
 
 const Container = styled.div`
@@ -30,9 +25,8 @@ const Container = styled.div`
   margin-bottom: 90px;
 
   @media (max-width: 768px) {
-
     margin-bottom: 100px;
-    }
+  }
 `;
 
 // Estilos dos Títulos e Entradas
@@ -189,6 +183,7 @@ const FlyerUpload: React.FC = () => {
   const [logs, setLogs] = useState<{ eventName: string; selectedDay: string; date: string }[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 3;
+  const [title, setTitle] = useState<string>(''); // Novo estado para o título
 
   // Carregar logs do local storage ao montar o componente
   useEffect(() => {
@@ -209,7 +204,7 @@ const FlyerUpload: React.FC = () => {
   };
 
   const handleUpload = async () => {
-    if (!file || !eventName) {
+    if (!file || !eventName || !title) { // Verifique se o título foi preenchido
       setError('Por favor, preencha todas as informações.');
       return;
     }
@@ -223,8 +218,9 @@ const FlyerUpload: React.FC = () => {
       formData.append('file', file);
       formData.append('name', eventName);
       formData.append('day', selectedDay);
+      formData.append('title', title); // Inclua o título nos dados do formulário
 
-      await axios.post('https:backendlife-production.up.railway.app/upload-flyer', formData, {
+      await axios.post('https://backendlife-production.up.railway.app/upload-flyer', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -242,6 +238,7 @@ const FlyerUpload: React.FC = () => {
       setSuccess(true);
       setEventName('');
       setFile(null);
+      setTitle(''); // Resetar o título após o envio
       setSelectedDay('quinta'); // Resetar para o dia padrão
     } catch (error) {
       setError('Erro ao enviar o arquivo.');
@@ -269,39 +266,58 @@ const FlyerUpload: React.FC = () => {
   };
 
   return (
-    <>
-    <HeaderAdmin />
+    <><HeaderAdmin />
     <OuterContainer>
       <Container>
-        <Title>Envio de Flyers</Title>
-        <Input type="text" value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="Nome do Evento" />
+        <Title>Upload do Flyer</Title>
+        <Input
+          type="text"
+          placeholder="Título do Evento"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)} // Atualizando o estado do título
+        />
+        <Input
+          type="text"
+          placeholder="Nome do Evento"
+          value={eventName}
+          onChange={(e) => setEventName(e.target.value)}
+        />
         <Select value={selectedDay} onChange={handleDayChange}>
           <option value="quinta">Quinta</option>
           <option value="sexta">Sexta</option>
           <option value="sábado">Sábado</option>
         </Select>
         <Input type="file" onChange={handleFileChange} />
-        <Button disabled={loading} onClick={handleUpload}>
-          {loading ? 'Enviando...' : 'Enviar Flyer'}
+        <Button onClick={handleUpload} disabled={loading}>
+          {loading ? 'Enviando...' : 'Enviar'}
         </Button>
-        {success && <SuccessMessage>Flyer enviado com sucesso!</SuccessMessage>}
+        {success && (
+          <SuccessMessage>Flyer enviado com sucesso! Data: {uploadDate}</SuccessMessage>
+        )}
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        
         <LogHistory>
           {currentLogs.map((log, index) => (
             <LogEntry key={index}>
-              <LogText>{`Evento: ${log.eventName}, ${log.selectedDay}, ${log.date}`}</LogText>
+              <LogText>
+                {log.eventName} - {log.selectedDay} - {log.date}
+              </LogText>
             </LogEntry>
           ))}
         </LogHistory>
+        
         <PaginationContainer>
-          <PaginationButton onClick={handlePrevPage} disabled={currentPage === 1}>Anterior</PaginationButton>
+          <PaginationButton onClick={handlePrevPage} disabled={currentPage === 1}>
+            Anterior
+          </PaginationButton>
           <PageInfo>{`Página ${currentPage} de ${totalPages}`}</PageInfo>
-          <PaginationButton onClick={handleNextPage} disabled={currentPage === totalPages}>Próximo</PaginationButton>
+          <PaginationButton onClick={handleNextPage} disabled={currentPage === totalPages}>
+            Próxima
+          </PaginationButton>
         </PaginationContainer>
       </Container>
     </OuterContainer>
     </>
-    
   );
 };
 
