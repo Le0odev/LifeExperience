@@ -7,3 +7,13 @@
 
 
 }
+
+.slick-next {
+  right: -25px; /* Posição padrão no desktop */
+}
+
+@media (max-width: 768px) {
+  .slick-next {
+      right: 10px; /* Ajuste para dispositivos móveis */
+  }
+}

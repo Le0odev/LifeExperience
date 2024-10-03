@@ -14,6 +14,7 @@ import Life from './Components/Life.tsx';
 import GallerySection from './Components/Gallery.tsx';
 import MidiaUpload from './Components/MidiaUpload.tsx';
 
+
 // Componente para renderizar Header, Home e Programacao com base na localização
 const App = () => {
   const [user, setUser] = useState<any>(null); // Estado para armazenar o usuário

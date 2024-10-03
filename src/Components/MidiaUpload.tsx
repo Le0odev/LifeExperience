@@ -189,7 +189,7 @@ const MidiaUpload: React.FC = () => {
       // Inspecionar o FormData antes de enviar
       console.log(Array.from(formData.entries()));
   
-      const response = await axios.post('http://localhost:5000/upload-gallery-media', formData, {
+      const response = await axios.post('https://backendlife-production.up.railway.app/upload-gallery-media', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -218,7 +218,7 @@ const MidiaUpload: React.FC = () => {
   return (
     <>
       <HeaderAdmin />
-      <OuterContainer id='media'>
+      <OuterContainer id='gallery'>
         <Container>
           <Title>Envio de Mídia</Title>
           <Input 

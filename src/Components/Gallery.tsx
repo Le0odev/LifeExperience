@@ -3,50 +3,70 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css';
+import StarRating from './StarRating';
 
 const GalleryContainer = styled.section`
     padding: 60px 20px;
     text-align: center;
-    background-color: #000000;
+    background-color: #000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     height: 100vh;  
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+
+     @media (max-width: 768px) {
+        display: block:
+     }
 `;
 
 const ContentWrapper = styled.div`
-    margin-top: 45px;
+    margin-top: 55px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+
+  .slick-list {margin: 0 -7px;}
+  .slick-slide>div {padding: 0 7px;}
 `;
 
 const SectionTitle = styled.h2`
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    font-weight: bold;
-    color: rgba(254, 207, 3, 0.85);
-    text-shadow: 1px 1px 5px rgba(254, 207, 3, 0.5);
+    font-size: 2.8rem;
+    margin-bottom: x;
+    font-weight: 600;
+    color: rgba(254, 207, 3, 0.9);
+    letter-spacing: 0.05rem;
 
     @media (max-width: 768px) {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 `;
 
 const SectionSubtitle = styled.p`
-    font-size: 1.2rem;
-    margin-bottom: 25px;
+    font-size: 28px;
+    margin-bottom: 50px;
     color: #ffffff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
+
+    @media (max-width: 768px) {
+        font-size: 22px;
+        margin-bottom: 50px;
+    }
 `;
 
 const GalleryItem = styled.div`
     position: relative;
     overflow: hidden;
-    border-radius: 10px;
-    border: 0.5px solid rgba(254, 207, 3, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(254, 207, 3, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
     &:hover {
         transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        border: none;
     }
 `;
 
@@ -88,38 +108,40 @@ const Overlay = styled.div`
     color: #fecf03;
 
     ${GalleryItem}:hover & {
-        opacity: 0.9;
+        opacity: 0.95;
     }
 `;
 
 const EventTitle = styled.h3`
-    font-size: 1.4rem;
-    margin-bottom: 5px;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
     color: #fecf03;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 `;
 
 const EventDate = styled.p`
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #ffffff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 `;
 
 const ReserveButton = styled.a`
     background-color: #fecf03;
     color: #000;
-    padding: 12px 24px;
+    padding: 14px 28px;
     border-radius: 10px;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(254, 207, 3, 0.3);
+    box-shadow: 0 6px 20px rgba(254, 207, 3, 0.4);
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 30px;
 
     &:hover {
         background-color: #e6b600;
-        transform: translateY(-4px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     }
 `;
 
@@ -133,10 +155,9 @@ interface Event {
 const GallerySection: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
 
-    // Função para buscar os eventos da API
     const fetchEvents = async () => {
         try {
-            const response = await fetch('http://localhost:5000/gallery-media');
+            const response = await fetch('https://backendlife-production.up.railway.app/gallery-media');
             const data = await response.json();
             setEvents(data);
         } catch (error) {
@@ -145,7 +166,7 @@ const GallerySection: React.FC = () => {
     };
     
     useEffect(() => {
-        fetchEvents(); // Buscar os eventos ao carregar o componente
+        fetchEvents();
     }, []);
 
     const settings = {
@@ -153,7 +174,6 @@ const GallerySection: React.FC = () => {
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 1,
-        adaptiveHeight: true,
         autoplay: true,
         autoplaySpeed: 2500,
         pauseOnHover: true,
@@ -170,6 +190,8 @@ const GallerySection: React.FC = () => {
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
+                    arrows: false
+
                 }
             }
         ]
@@ -178,7 +200,7 @@ const GallerySection: React.FC = () => {
     return (
         <GalleryContainer id='gallery'>
             <ContentWrapper>
-                <SectionTitle>Galeria de Eventos Passados</SectionTitle>
+                <SectionTitle>FEEL THE EXPERIENCE</SectionTitle>
                 <SectionSubtitle>Veja os melhores momentos dos nossos eventos anteriores!</SectionSubtitle>
                 <Slider {...settings}>
                     {events.map((event) => (
@@ -197,10 +219,10 @@ const GallerySection: React.FC = () => {
                         </GalleryItem>
                     ))}
                 </Slider>
-                <ReserveButton href="/reservar-ingressos">Reservar Ingressos</ReserveButton>
+                <StarRating />
             </ContentWrapper>
         </GalleryContainer>
     );
 };
 
-export default GallerySection
+export default GallerySection;

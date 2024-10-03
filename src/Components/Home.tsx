@@ -30,7 +30,7 @@ const Title = styled.h1`
 `;
 
 // Destaque dentro do título
-const Highlight = styled.span`
+export const Highlight = styled.span`
     color: #e6b600; /* Cor de destaque */
     font-size: clamp(2rem, 5vw, 4rem); /* Tamanho responsivo */
 `;

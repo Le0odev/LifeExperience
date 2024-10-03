@@ -19,17 +19,18 @@ const ContentWrapper = styled.div`
 
     
     @media (max-width: 768px) {
-    margin-top: 25px;
+    margin-top: 45px;
     }
 `;
 
 const Title = styled.h2`
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    font-weight: bold;
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: rgba(254, 207, 3, 0.9);
+    letter-spacing: 0.05rem;
 
     @media (max-width: 768px) {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 `;
 
@@ -231,7 +232,7 @@ const Programacao: React.FC = () => {
     return (
         <ProgramacaoContainer id='programacao'>
             <ContentWrapper>
-                <Title>Programação Semanal</Title>
+                <Title>PROGRAMAÇÃO SEMANAL</Title>
                 <Subtitle>Confira os eventos da semana ⚡</Subtitle>
                 {!hasUpcomingEvents ? (
                     <NoEvents>Não há mais eventos programados para essa semana!</NoEvents>
