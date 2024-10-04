@@ -266,21 +266,45 @@ const Programacao: React.FC = () => {
     };
     type WeekDays = 'quinta' | 'sexta' | 'sábado';
 
-const getDatesForWeek = () => {
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 (domingo) a 6 (sábado)
-
-    // Obtenha a diferença em dias para o próximo quinta
-    const daysUntilThursday = (4 - dayOfWeek + 7) % 7; // 4 é o índice do dia da semana para quinta
-
-    const dates: Record<WeekDays, string> = {
-        quinta: new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday).toLocaleDateString(),
-        sexta: new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday + 1).toLocaleDateString(),
-        sábado: new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday + 2).toLocaleDateString(),
+    const getDatesForWeek = () => {
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0 (domingo) a 6 (sábado)
+    
+        // Função auxiliar para formatar a data
+        const formatDate = (date: Date) => {
+            return date.toLocaleDateString();
+        };
+    
+        // Função para calcular a próxima data de um dia da semana
+        const getNextDate = (daysOffset: number) => {
+            const nextDate = new Date(today);
+            nextDate.setDate(today.getDate() + daysOffset);
+            return formatDate(nextDate);
+        };
+    
+        // Dias até a próxima quinta-feira
+        const daysUntilThursday = (4 - dayOfWeek + 7) % 7;
+    
+        let dates: Record<WeekDays, string>;
+    
+        // Se hoje for domingo (0) ou qualquer dia após sábado (>=1), usa a próxima semana
+        if (dayOfWeek === 0 || dayOfWeek > 6) {
+            dates = {
+                quinta: getNextDate(daysUntilThursday),
+                sexta: getNextDate(daysUntilThursday + 1),
+                sábado: getNextDate(daysUntilThursday + 2),
+            };
+        } else {
+            // Até sábado, mantém a data da semana atual
+            dates = {
+                quinta: formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + (4 - dayOfWeek))),
+                sexta: formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + (5 - dayOfWeek))),
+                sábado: formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + (6 - dayOfWeek))),
+            };
+        }
+    
+        return dates;
     };
-
-    return dates;
-};
 
     useEffect(() => {
         const dates = getDatesForWeek(); // Pega as datas para a semana atual

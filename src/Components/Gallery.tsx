@@ -28,7 +28,7 @@ const ContentWrapper = styled.div`
     margin-right: auto;
 
     @media (max-width: 768px) {
-        margin-bottom: 65px;
+    margin-top: 45px;
     }
     .slick-list {margin: 0 -7px;}
     .slick-slide>div {padding: 0 7px;}

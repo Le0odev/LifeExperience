@@ -4,178 +4,223 @@ import styled from 'styled-components';
 import Header from './Header';
 import HeaderAdmin from './HeaderAdmin';
 
-// Estilos do Container Principal
-const OuterContainer = styled.div`
-  background-color: #000;
-  min-height: 100vh;
+
+// Contêiner Externo
+export const OuterContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 20px;
-`;
-
-const Container = styled.div`
-  max-width: 500px;
-  width: 100%;
-  padding: 40px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #1e1e1e, #111);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  border: 1px solid #ffc107; /* Amarelo */
-  margin-bottom: 90px;
-
+  background-color: #000; /* Fundo preto para contraste */
   @media (max-width: 768px) {
-    margin-bottom: 100px;
+    padding: 15px;
   }
 `;
 
-// Estilos dos Títulos e Entradas
-const Title = styled.h2`
-  color: #ffc107; /* Amarelo */
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 30px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-`;
-
-const Input = styled.input`
+// Contêiner Principal
+export const Container = styled.div`
   width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-size: 18px;
-  background-color: #333;
-  color: #fff;
-  transition: all 0.3s ease;
-
-  &:focus {
-    border-color: #ffc107; /* Amarelo */
-    background-color: #444;
-    box-shadow: 0 0 5px #ffc107;
-    outline: none;
-  }
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-size: 18px;
-  background-color: #333;
-  color: #fff;
-  appearance: none;
-  transition: all 0.3s ease;
-
-  &:focus {
-    border-color: #ffc107; /* Amarelo */
-    background-color: #444;
-    box-shadow: 0 0 5px #ffc107;
-    outline: none;
-  }
-`;
-
-// Estilos do Botão
-const Button = styled.button<{ disabled: boolean }>`
-  width: 100%;
-  padding: 15px;
-  margin-top: 20px;
-  background-color: ${({ disabled }) => (disabled ? '#555' : '#ffc107')}; /* Amarelo */
-  color: #000; /* Preto */
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4); /* Amarelo */
-  transition: all 0.3s ease;
+  max-width: 600px;
+  background-color: #1a1a1a; /* Cinza escuro com leve ajuste */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  border: 2px solid rgba(254, 207, 3, 0.8); /* Borda amarelo mais suave */
+  transition: transform 0.3s, box-shadow 0.3s;
 
   &:hover {
-    background-color: ${({ disabled }) => (disabled ? '#555' : '#e0a800')}; /* Amarelo mais escuro */
-    box-shadow: ${({ disabled }) =>
-      disabled ? 'none' : '0 6px 15px rgba(255, 193, 7, 0.6)'};
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* Sombra mais intensa ao passar o mouse */
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 20px;
   }
 `;
 
-// Estilos das Mensagens
-const SuccessMessage = styled.p`
-  color: #00ff7f;
+// Título
+export const Title = styled.h1`
+  font-size: 28px; /* Tamanho aumentado para destaque */
+  color: rgba(254, 207, 3, 0.9); /* Amarelo suave */
+  margin-bottom: 20px;
   text-align: center;
-  margin-top: 15px;
-  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px; /* Maior espaçamento entre letras */
 `;
 
-const ErrorMessage = styled.p`
-  color: red;
-  text-align: center;
-  margin-top: 15px;
-  font-weight: bold;
+// Estilo de Entrada
+export const Input = styled.input`
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background-color: #333; /* Cinza escuro */
+  color: #fff; /* Texto branco */
+  font-size: 16px;
+
+  &:focus {
+    border-color: rgba(254, 207, 3, 1);
+    outline: none;
+    box-shadow: 0 0 5px rgba(254, 207, 3, 0.5); /* Brilho amarelo ao focar */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
-// Estilos dos Logs
-const LogHistory = styled.div`
-  margin-top: 20px;
-  padding: 20px;
-  border: 0.5px solid #ffc107; /* Amarelo */
-  border-radius: 8px;
-  background-color: #222;
-  color: #fff;
-  text-align: left;
-  max-height: 300px; /* Aumentado para dar mais espaço */
+export const Select = styled.select`
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background-color: #333; /* Cinza escuro */
+  color: #fff; /* Texto branco */
+  font-size: 16px;
+
+  &:focus {
+    border-color: rgba(254, 207, 3, 1);
+    outline: none;
+    box-shadow: 0 0 5px rgba(254, 207, 3, 0.5); /* Brilho amarelo ao focar */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+// Estilo de Botão
+export const Button = styled.button`
+  width: 100%;
+  padding: 15px;
+  background-color: rgba(254, 207, 3, 1); /* Amarelo */
+  color: #000; /* Texto preto */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    background-color: rgba(254, 207, 3, 0.8); /* Amarelo suave ao passar o mouse */
+    transform: scale(1.03); /* Aumento sutil ao passar o mouse */
+  }
+
+  &:disabled {
+    background-color: #555; /* Cinza para botão desabilitado */
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+// Mensagens de Sucesso e Erro
+export const SuccessMessage = styled.div`
+  color: #28a745; /* Verde */
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+`;
+
+export const ErrorMessage = styled.div`
+  color: #dc3545; /* Vermelho */
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+`;
+
+// Histórico de Logs
+export const LogHistory = styled.div`
+  margin-top: 30px;
+  max-height: 300px;
   overflow-y: auto;
+  background-color: #222; /* Fundo cinza escuro para logs */
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Sombra mais intensa para histórico */
 `;
 
-const LogEntry = styled.div`
-  margin-bottom: 10px;
+// Entrada de Log
+export const LogEntry = styled.div`
   padding: 10px;
-  background-color: #333;
-  border-radius: 6px;
+  border-bottom: 1px solid #444; /* Borda entre logs */
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(254, 207, 3, 0.1); /* Fundo amarelo claro ao passar o mouse */
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
-const LogText = styled.p`
+// Texto de Log
+export const LogText = styled.p`
+  margin: 5px 0;
+  color: rgba(254, 207, 3, 1); /* Amarelo para texto de logs */
   font-size: 14px;
-  color: #fff;
-  margin: 0;
-  word-wrap: break-word;
 `;
 
-// Estilos da Paginação
-const PaginationContainer = styled.div`
+// Contêiner de Paginação
+export const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 20px;
 `;
 
-const PaginationButton = styled.button`
-  margin: 0 5px;
-  padding: 10px 15px;
+// Botão de Paginação
+export const PaginationButton = styled.button`
+  background-color: rgba(254, 207, 3, 1); /* Amarelo */
   border: none;
-  background-color: #ffc107; /* Amarelo */
-  color: #000;
-  border-radius: 8px;
+  color: black;
+  padding: 10px;
+  margin: 0 5px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #e0a800; /* Amarelo mais escuro */
+    background-color: rgba(254, 207, 3, 0.8); /* Amarelo suave ao passar o mouse */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
   }
 `;
 
-const PageInfo = styled.p`
-  color: #ffc107; /* Amarelo */
-  margin: 0 15px;
-  align-self: center;
+// Informações da Página
+export const PageInfo = styled.span`
+  color: #fff; /* Texto branco */
+  margin: 0 10px;
+  font-size: 14px;
+`;
+// Estilo do Label
+export const Label = styled.label`
+  display: block;
+  font-size: 16px; /* Tamanho da fonte */
+  color: #ffcc00; /* Amarelo */
+  margin-bottom: 5px; /* Espaçamento inferior */
+  text-transform: uppercase; /* Transformação de texto */
+  letter-spacing: 1px; /* Espaçamento entre letras */
+  
+  @media (max-width: 768px) {
+    font-size: 14px; /* Ajuste no tamanho da fonte para telas menores */
+  }
 `;
 
 // Componente Principal
 const FlyerUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [eventName, setEventName] = useState<string>('');
-  const [selectedDay, setSelectedDay] = useState<string>('quinta-feira');
+  const [selectedDay, setSelectedDay] = useState('Seleciona o dia');
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [uploadDate, setUploadDate] = useState<string | null>(null);
@@ -202,7 +247,9 @@ const FlyerUpload: React.FC = () => {
   const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDay(e.target.value);
   };
+  
 
+  
   const handleUpload = async () => {
     if (!file || !eventName || !title) { // Verifique se o título foi preenchido
       setError('Por favor, preencha todas as informações.');
@@ -283,6 +330,9 @@ const FlyerUpload: React.FC = () => {
           onChange={(e) => setEventName(e.target.value)}
         />
         <Select value={selectedDay} onChange={handleDayChange}>
+        <option value="Selecione o dia" >
+          Seleciona o dia
+        </option>
           <option value="quinta">Quinta</option>
           <option value="sexta">Sexta</option>
           <option value="sábado">Sábado</option>

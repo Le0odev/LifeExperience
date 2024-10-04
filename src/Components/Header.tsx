@@ -3,12 +3,111 @@ import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
     width: 100%;
-    color: #fecf03; /* Amarelo */
+    color: #fecf03;
     padding: 20px 0;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
+
+    @media (max-width: 768px) {
+    background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(38,57,63,260)); /* Adicionando um gradiente */
+        border-radius: 4px;
+        padding: 8px 0;
+    }
+`;
+
+const Hamburger = styled.button<{ isOpen: boolean }>`
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px; /* Diminuir o tamanho do ícone */
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+
+    div {
+        width: 100%;
+        height: 3px; /* Linhas mais finas */
+        background-color: #fecf03; /* Amarelo */
+        transition: all 0.3s ease;
+        transform-origin: 1px;
+
+        &:nth-child(1) {
+            transform: ${({ isOpen }) => (isOpen ? 'rotate(45deg)' : 'rotate(0)')};
+        }
+        &:nth-child(2) {
+            opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
+            transform: ${({ isOpen }) => (isOpen ? 'translateX(20px)' : 'translateX(0)')};
+        }
+        &:nth-child(3) {
+            transform: ${({ isOpen }) => (isOpen ? 'rotate(-45deg)' : 'rotate(0)')};
+        }
+    }
+
+    @media (max-width: 768px) {
+        display: flex;
+    }
+`;
+
+const MobileNav = styled.nav<{ isOpen: boolean }>`
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: ${({ isOpen }) => (isOpen ? '100%' : '0')};
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(38,57,63,280)); /* Adicionando um gradiente */
+    z-index: 9999;
+    transition: width 0.4s ease, opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+    pointer-events: ${({ isOpen }) => (isOpen ? 'auto' : 'none')};
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+
+    li {
+        margin: 20px 0; /* Maior espaçamento entre os itens */
+        opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+        transition: opacity 0.5s ease;
+    }
+
+    a {
+        color: #fecf03;
+        font-size: 2rem; /* Aumentando o tamanho da fonte */
+        font-weight: bold;
+        letter-spacing: 1.2px;
+        text-decoration: none;
+
+        &:hover {
+            color: #e6b800; /* Cor de hover */
+        }
+    }
+
+    .close-icon {
+        position: absolute;
+        top: -8px;
+        right: 22px;
+        font-size: 3.8rem;
+        color: #fecf03;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: rotate(90deg);
+        }
+    }
 `;
 
 const ContentWrapper = styled.div`
@@ -31,11 +130,21 @@ const LogoImage = styled.img`
     height: auto;
     margin-right: 5px;
     border-radius: 50%;
+
+    @media (max-width: 768px) {
+        width: 45px;
+
+    }
+
 `;
 
 const LogoText = styled.h1`
     font-size: 24px;
     font-weight: bold;
+
+    @media (max-width: 768px) {
+        font-size: 20px;
+    }
 `;
 
 const Nav = styled.nav`
@@ -83,102 +192,8 @@ const Nav = styled.nav`
     }
 `;
 
-const Hamburger = styled.button<{ isOpen: boolean }>`
-    display: none;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
 
-    div {
-        width: 100%;
-        height: 4px;
-        background-color: #fecf03;
-        transition: all 0.3s ease;
-        transform-origin: 1px;
 
-        &:nth-child(1) {
-            transform: ${({ isOpen }) => (isOpen ? 'rotate(45deg)' : 'rotate(0)')};
-        }
-        &:nth-child(2) {
-            opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
-            transform: ${({ isOpen }) => (isOpen ? 'translateX(20px)' : 'translateX(0)')};
-        }
-        &:nth-child(3) {
-            transform: ${({ isOpen }) => (isOpen ? 'rotate(-45deg)' : 'rotate(0)')};
-        }
-    }
-
-    @media (max-width: 768px) {
-        display: flex; /* Mostrar o ícone do menu em telas pequenas */
-    }
-`;
-
-const MobileNav = styled.nav<{ isOpen: boolean }>`
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: ${({ isOpen }) => (isOpen ? '100%' : '0')}; /* Menu de tela cheia */
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.85); /* Fundo escuro, opacidade maior */
-    z-index: 9999;
-    transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-
-    opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-    pointer-events: ${({ isOpen }) => (isOpen ? 'auto' : 'none')}; /* Evita cliques quando fechado */
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        text-align: center;
-        margin-bottom: 20px;
-
-    }
-
-    li {
-        margin: 20px 0;
-        transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(20px)')};
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-    }
-
-    a {
-        color: #fecf03;
-        font-size: 1.7rem;
-        font-weight: 700; /* Aumentando o peso da fonte */
-        letter-spacing: 1px; /* Melhor espaçamento para leitura */
-        text-decoration: none;
-        transition: color 0.3s ease;
-        
-        &:hover {
-            color: #e6b800; /* Cor de hover */
-        }
-    }
-
-    /* Ícone de fechar no topo direito */
-    .close-icon {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        font-size: 4rem;
-        color: #fecf03;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-
-        &:hover {
-            transform: rotate(90deg);
-        }
-    }
-`;
 
 const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
