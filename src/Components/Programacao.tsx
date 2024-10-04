@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -8,10 +9,10 @@ const ProgramacaoContainer = styled.section`
     color: #fecf03;
     text-align: center;
     height: 100vh;
-    overflow: auto; // Para permitir rolagem em telas menores
+    overflow: auto;
 
     @media (max-width: 768px) {
-        height: auto; // Ajustar a altura para auto em telas menores
+        height: auto;
     }
 `;
 
@@ -41,7 +42,6 @@ const Title = styled.h2`
 const EventList = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: 40px;
     gap: 40px;
     margin-bottom: 0px;
 
@@ -53,7 +53,7 @@ const EventList = styled.div`
 
 // Estilização do card de eventos
 const EventCard = styled.div`
-    position: relative; // Adiciona position relativa para o overlay
+    position: relative;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border: 1px solid rgba(254, 207, 3, 0.3);
     border-radius: 20px;
@@ -63,15 +63,20 @@ const EventCard = styled.div`
     max-width: 350px;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    height: 580px; // Define a altura fixa para uniformizar os cards
+     position: relative;
+  overflow: hidden; /* Para evitar que a mídia ultrapasse os limites do card */
+  transition: transform 0.3s ease; /* Transição suave para o aumento */
+
 
     &:hover {
         background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-12px);
+        transform: scale(1.05); /* Aumenta o card um pouco no hover */
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 3px 3px rgba(255, 255, 255, 0.3);
     }
 
     @media (max-width: 768px) {
-        width: 90%; // Aumenta a largura em dispositivos menores
+        width: 90%;
         margin: 10px 0;
     }
 `;
@@ -93,34 +98,34 @@ const EventDate = styled.h3`
     }
 `;
 
-// Estilização do flyer
-const Flyer = styled.img`
+// Estilização do flyer e do vídeo
+const Media = styled.div`
     width: 100%;
-    border-radius: 16px;
+    height: 400px; // Define a altura para uniformizar a mídia
     margin: 20px 0 25px;
-    transition: transform 0.3s ease;
-
-    &:hover {
-        transform: scale(1.05); // Leve aumento ao passar o mouse
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    }
-`;
-
-// Estilização do vídeo
-const Video = styled.video`
-    width: 100%;
+    overflow: hidden;
     border-radius: 16px;
-    margin: 20px 0 25px;
-    transition: transform 0.3s ease;
+      transition: transform 0.3s ease; /* Transição suave para a mídia */
 
-    &:hover {
-        transform: scale(1.05); // Leve aumento ao passar o mouse
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      ${EventCard}:hover & {
+        transform: scale(1.05); /* Aumenta a mídia também no hover */
+      }
+
+    img, video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; // Faz com que a imagem ou vídeo se ajuste sem distorção
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
     }
 `;
 
 // Estilização do botão de reserva
-const ReserveButton = styled.a`
+const ReserveButton = styled.button`
     background-color: #fecf03;
     color: #000000;
     padding: 15px 30px;
@@ -131,25 +136,14 @@ const ReserveButton = styled.a`
     font-size: 18px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3);
-    cursor: pointer; // Muda o cursor para indicar que é clicável
+    cursor: pointer;
+    margin-bottom: 25px ;
+
 
     &:hover {
         background-color: #e6b600;
         transform: translateY(-6px);
         box-shadow: 0 8px 20px rgba(254, 207, 3, 0.5);
-    }
-`;
-
-// Estilização do subtítulo
-const Subtitle = styled.p`
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #ffffff;
-    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
-
-    @media (max-width: 768px) {
-        font-size: 18px;
-        margin-bottom: 20px;
     }
 `;
 
@@ -189,6 +183,24 @@ const Overlay = styled.div<{ title: string }>`
     }
 `;
 
+
+
+
+
+// Estilização do subtítulo
+const Subtitle = styled.p`
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
+
+    @media (max-width: 768px) {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+`;
+
+
 // Definição da interface para Flyers
 interface Flyer {
     url: string;
@@ -200,15 +212,16 @@ interface Flyer {
 
 const Programacao: React.FC = () => {
     const [flyers, setFlyers] = useState<Flyer[]>([]);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Índice do card em foco
 
-    const daysInOrder = ['quinta', 'sexta', 'sábado'];
 
-    // Função para buscar os flyers por dia
+
+    const daysInOrder: WeekDays[] = ['quinta', 'sexta', 'sábado']; // Define a ordem dos dias
+
     const fetchFlyers = async (day: string) => {
         try {
             const response = await fetch(`https://backendlife-production.up.railway.app/flyers/${day}`);
             const data: Flyer[] = await response.json();
-            console.log(`Dados recebidos para ${day}:`, data);
             setFlyers(prevFlyers => {
                 const updatedFlyers = prevFlyers.filter(f => f.day !== day);
                 return [...updatedFlyers, ...data];
@@ -228,7 +241,6 @@ const Programacao: React.FC = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // Função para verificar se o evento já ocorreu
     const isEventPassed = (day: string): boolean => {
         const now = new Date();
         const dayOfWeek = now.getDay();
@@ -241,7 +253,6 @@ const Programacao: React.FC = () => {
         return days[day] < dayOfWeek;
     };
 
-    // Função para obter os flyers mais recentes por dia
     const getRecentFlyersByDay = () => {
         const recentFlyers: { [key: string]: Flyer } = {};
 
@@ -253,40 +264,83 @@ const Programacao: React.FC = () => {
 
         return recentFlyers;
     };
+    type WeekDays = 'quinta' | 'sexta' | 'sábado';
+
+const getDatesForWeek = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 (domingo) a 6 (sábado)
+
+    // Obtenha a diferença em dias para o próximo quinta
+    const daysUntilThursday = (4 - dayOfWeek + 7) % 7; // 4 é o índice do dia da semana para quinta
+
+    const dates: Record<WeekDays, string> = {
+        quinta: new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday).toLocaleDateString(),
+        sexta: new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday + 1).toLocaleDateString(),
+        sábado: new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday + 2).toLocaleDateString(),
+    };
+
+    return dates;
+};
+
+    useEffect(() => {
+        const dates = getDatesForWeek(); // Pega as datas para a semana atual
+
+        daysInOrder.forEach((day) => {
+            fetchFlyers(day);
+        });
+    }, []);
 
     const recentFlyers = getRecentFlyersByDay();
 
     return (
         <ProgramacaoContainer id='programacao'>  
-            <Title>Programação</Title>
+        <ContentWrapper>
+            <Title>PROGRAMAÇÃO DA SEMANA</Title>
             <Subtitle>Não fique de fora! Veja os eventos que preparamos para você!</Subtitle>
-            <ContentWrapper>
-                <EventList>
-                    {daysInOrder.map((day, index) => {
-                        const flyer = recentFlyers[day];
+            <EventList>
+                {daysInOrder.map((day, index) => {
+                    const flyer = recentFlyers[day];
+                    const date = getDatesForWeek()[day]; // Obtém a data para o dia correspondente
+                    const dayFlyers = flyers.filter(f => f.day === day);
 
-                        return flyer ? (
-                            <EventCard key={index}>
-                                <EventDate>{day}</EventDate>
+
+                    return flyer ? (
+                        <EventCard 
+                            key={index}
+                            onMouseEnter={() => setHoveredIndex(index)} // Define o índice do card em foco
+                            onMouseLeave={() => setHoveredIndex(null)} // Limpa o índice ao sair
+                        >
+                                <EventDate>{`${day.charAt(0).toUpperCase() + day.slice(1)} - ${date}`}</EventDate>
+                                <Media>
                                 {flyer.isVideo ? (
-                                    <Video src={flyer.url} autoPlay loop muted/>
+                                    <video src={flyer.url} 
+                                    autoPlay
+                                    loop
+                                    muted={hoveredIndex !== index} // Muta ou desmuta o vídeo conforme o hover
+                                    style={{ pointerEvents: 'none' }} // Para impedir a interação com o vídeo
+                                       
+                                    />
                                 ) : (
-                                    <Flyer src={flyer.url} alt={flyer.title} />
+                                    <img src={flyer.url} alt={day} />
                                 )}
-                                <Overlay title={flyer.title}>
-                                    
-                                </Overlay>
-                            </EventCard>
-                        ) : (
-                            <NoEvents key={index}>
-                                Nenhum evento programado para {day}.
-                            </NoEvents>
-                        );
-                    })}
-                </EventList>
-            </ContentWrapper>
-        </ProgramacaoContainer>
-    );
+                            </Media>
+                            <ReserveButton >Reservar ingresso</ReserveButton>
+                            {/* Removido o Overlay para o nome do evento */}
+                        </EventCard>
+                    ) : null;
+                })}
+            </EventList>
+
+            {Object.keys(recentFlyers).length === 0 && (
+                <NoEvents>Nenhum evento disponível no momento.</NoEvents>
+            )}
+        </ContentWrapper>
+    </ProgramacaoContainer>
+);
 };
 
+
 export default Programacao;
+
+
+

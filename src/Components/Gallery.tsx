@@ -11,27 +11,27 @@ const GalleryContainer = styled.section`
     background-color: #000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     height: 100vh;
-    height: 100%;  
     display: block;
     flex-direction: column;
     justify-content: center;
 
-     @media (max-width: 768px) {
+    @media (max-width: 768px) {
+        height: 100vh;
         height: 100%
-     }
+    }
 `;
 
 const ContentWrapper = styled.div`
-    margin-top: 55px;
+    margin-top: 65px;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
 
-     @media (max-width: 768px) {
-        margin-top: 45px;
+    @media (max-width: 768px) {
+        margin-bottom: 65px;
     }
-  .slick-list {margin: 0 -7px;}
-  .slick-slide>div {padding: 0 7px;}
+    .slick-list {margin: 0 -7px;}
+    .slick-slide>div {padding: 0 7px;}
 `;
 
 const SectionTitle = styled.h2`
@@ -43,7 +43,6 @@ const SectionTitle = styled.h2`
     @media (max-width: 768px) {
         font-size: 1.5rem;
         margin-bottom: 10px;
-
     }
 `;
 
@@ -159,6 +158,7 @@ interface Event {
 
 const GallerySection: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Índice do card em foco
 
     const fetchEvents = async () => {
         try {
@@ -196,7 +196,6 @@ const GallerySection: React.FC = () => {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     arrows: false
-
                 }
             }
         ]
@@ -208,11 +207,15 @@ const GallerySection: React.FC = () => {
                 <SectionTitle>FEEL THE EXPERIENCE</SectionTitle>
                 <SectionSubtitle>Veja os melhores momentos dos nossos eventos anteriores!</SectionSubtitle>
                 <Slider {...settings}>
-                    {events.map((event) => (
-                        <GalleryItem key={event.title}>
+                    {events.map((event, index) => (
+                        <GalleryItem 
+                            key={event.title}
+                            onMouseEnter={() => setHoveredIndex(index)} 
+                            onMouseLeave={() => setHoveredIndex(null)}
+                        >
                             <Media>
                                 {event.isVideo ? (
-                                    <Video src={event.url} autoPlay loop muted />
+                                    <Video src={event.url} autoPlay loop muted={hoveredIndex !== index} />
                                 ) : (
                                     <Image src={event.url} alt={event.title} />
                                 )}
