@@ -263,6 +263,7 @@ const Header: React.FC = () => {
                         <li><a href="#life" className={activeSection === 'life' ? 'active' : ''}>Life</a></li>
                         <li><a href="#programacao" className={activeSection === 'programacao' ? 'active' : ''}>Programação</a></li>
                         <li><a href="#gallery" className={activeSection === 'gallery' ? 'active' : ''}>Galeria</a></li>
+                        <li><a href="#reservas" className={activeSection === 'reservas' ? 'active' : ''}>Reservas</a></li>
                         <li><a href="#contact" className={activeSection === 'contact' ? 'active' : ''}>Contato</a></li>
                     </ul>
                 </Nav>

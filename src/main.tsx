@@ -13,6 +13,7 @@ import { onAuthStateChanged } from 'firebase/auth'; // Importe a função para m
 import Life from './Components/Life.tsx';
 import GallerySection from './Components/Gallery.tsx';
 import MidiaUpload from './Components/MidiaUpload.tsx';
+import Reservas from './Components/Reservas.tsx';
 
 
 // Componente para renderizar Header, Home e Programacao com base na localização
@@ -38,6 +39,7 @@ const App = () => {
           <Life />
           <Programacao />
           <GallerySection />
+          <Reservas />
         </>
       )}
       <Routes>

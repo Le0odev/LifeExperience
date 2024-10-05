@@ -47,10 +47,10 @@ const SectionTitle = styled.h2`
 `;
 
 const SectionSubtitle = styled.p`
-    font-size: 28px;
     margin-bottom: 50px;
-    color: #ffffff;
-    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
+    font-size: 1.3rem;
+    color: #ddd;
+    margin-bottom: 40px;
 
     @media (max-width: 768px) {
         font-size: 18px;

@@ -10,6 +10,9 @@ const ProgramacaoContainer = styled.section`
     text-align: center;
     height: 100vh;
     overflow: auto;
+    border-top:   0.5px solid #fecf03;
+    border-bottom:   0.5px solid #fecf03;
+
 
     @media (max-width: 768px) {
         height: auto;
@@ -189,10 +192,9 @@ const Overlay = styled.div<{ title: string }>`
 
 // Estilização do subtítulo
 const Subtitle = styled.p`
-    font-size: 28px;
+    font-size: 1.3rem;
     margin-bottom: 20px;
-    color: #ffffff;
-    text-shadow: 1px 1px 8px rgba(254, 207, 3, 0.5);
+    color: #ddd;
 
     @media (max-width: 768px) {
         font-size: 18px;
@@ -208,6 +210,7 @@ interface Flyer {
     createdAt: number;
     isVideo?: boolean;
     title: string;
+    name: string;
 }
 
 const Programacao: React.FC = () => {
@@ -348,7 +351,9 @@ const Programacao: React.FC = () => {
                                     <img src={flyer.url} alt={day} />
                                 )}
                             </Media>
-                            <ReserveButton >Reservar ingresso</ReserveButton>
+                            <a href={flyer.name} target='_blank' rel='noopener noreferrer'>
+                            <ReserveButton>Reservar ingresso</ReserveButton>
+                            </a>
                             {/* Removido o Overlay para o nome do evento */}
                         </EventCard>
                     ) : null;

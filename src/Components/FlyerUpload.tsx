@@ -11,6 +11,8 @@ export const OuterContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  height: 100%;
+  height: 100vh;
   background-color: #000; /* Fundo preto para contraste */
   @media (max-width: 768px) {
     padding: 15px;
@@ -325,7 +327,7 @@ const FlyerUpload: React.FC = () => {
         />
         <Input
           type="text"
-          placeholder="Nome do Evento"
+          placeholder="Link do Evento"
           value={eventName}
           onChange={(e) => setEventName(e.target.value)}
         />
