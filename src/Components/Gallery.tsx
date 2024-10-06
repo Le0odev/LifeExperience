@@ -8,7 +8,7 @@ import StarRating from './StarRating';
 const GalleryContainer = styled.section`
     padding: 60px 20px;
     text-align: center;
-    background-color: #000;
+    background-color: #0d0d0d; /* Preto suave */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     height: 100vh;
     display: block;
@@ -39,22 +39,21 @@ const SectionTitle = styled.h2`
     font-weight: 600;
     color: rgba(254, 207, 3, 0.9);
     letter-spacing: 0.05rem;
+    margin-bottom: 20px;
 
     @media (max-width: 768px) {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
+        font-size: 2rem;
     }
 `;
 
+
 const SectionSubtitle = styled.p`
     margin-bottom: 50px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #ddd;
-    margin-bottom: 40px;
 
     @media (max-width: 768px) {
-        font-size: 18px;
-        margin-bottom: 30px;
+        font-size: 16px;
     }
 `;
 
@@ -65,21 +64,28 @@ const GalleryItem = styled.div`
     border: 1px solid rgba(254, 207, 3, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 10px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
     &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        transform: scale(1.01);
         border: none;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        border-color: rgba(254, 207, 3, 0.7);
     }
 `;
 
 const Media = styled.div`
     width: 100%;
     height: 450px; 
-    object-fit: cover;
     border-radius: 10px;
     overflow: hidden;
+    position: relative; /* Para o efeito de zoom */
+    
+    &:hover img, &:hover video {
+        transform: scale(1.05); /* Efeito de zoom */
+        transition: transform 0.5s ease; /* Suavizar o zoom */
+    }
 `;
 
 const Image = styled.img`
@@ -102,7 +108,7 @@ const Overlay = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     opacity: 0;
     transition: opacity 0.3s ease;
     display: flex;
@@ -112,7 +118,7 @@ const Overlay = styled.div`
     color: #fecf03;
 
     ${GalleryItem}:hover & {
-        opacity: 0.95;
+        opacity: 1;
     }
 `;
 

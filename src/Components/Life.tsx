@@ -88,15 +88,19 @@
   `;
 
   const Button = styled.button`
-    background-color: #ffcc00;
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s;
+    background-color: #fecf03;
+  color: #000;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
     &:hover {
       background-color: #e6b800; /* Cor mais escura ao passar o mouse */

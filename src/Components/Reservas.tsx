@@ -315,23 +315,7 @@ const Reservas = () => {
             <ReservasBotaoSecundario onClick={() => setIsModalOpen(true)}>Saiba Mais</ReservasBotaoSecundario>
           </div>
 
-          <InformacoesContato>
-            <div>
-            <IconContainer>
-              <a href='https://api.whatsapp.com/send?phone=5581998991105&fbclid=PAZXh0bgNhZW0CMTEAAab6-ylk4xcwgfgUorzqG3cQfAlv6pZbEBpcXqW7-J9RxCkJ1UjYjSnY7Yo_aem_4s7W00HUkvd1c6v9o4cGHg' target="_blank" rel="noopener noreferrer">
-                <FaWhatsapp style={{ color: '#fecf03' }} />
-              </a>
-            </IconContainer>              (81) 99881-6008
-            </div>
-            <div>
-              <IconContainer><FaEnvelope /></IconContainer>
-              contato@empresa.com
-            </div>
-            <div>
-              <IconContainer><FaClock /></IconContainer>
-              Seg - Qui: 10:00 - 17:30
-            </div>
-          </InformacoesContato>
+          
         </ReservasContent>
       </ReservasSection>
 

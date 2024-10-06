@@ -14,6 +14,7 @@ import Life from './Components/Life.tsx';
 import GallerySection from './Components/Gallery.tsx';
 import MidiaUpload from './Components/MidiaUpload.tsx';
 import Reservas from './Components/Reservas.tsx';
+import Contact from './Components/Contact.tsx';
 
 
 // Componente para renderizar Header, Home e Programacao com base na localização
@@ -40,6 +41,7 @@ const App = () => {
           <Programacao />
           <GallerySection />
           <Reservas />
+          <Contact />
         </>
       )}
       <Routes>

@@ -2,24 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-// Estilização do container principal
 const ProgramacaoContainer = styled.section`
     padding: 60px 20px;
-    background-color: #000000;
+    background-color: #0d0d0d; /* Preto suave */
     color: #fecf03;
     text-align: center;
     height: 100vh;
     overflow: auto;
-    border-top:   0.5px solid #fecf03;
-    border-bottom:   0.5px solid #fecf03;
-
+    border-top: 1px solid #fecf03;
+    border-bottom: 1px solid #fecf03;
 
     @media (max-width: 768px) {
         height: auto;
     }
 `;
 
-// Wrapper para o conteúdo
 const ContentWrapper = styled.div`
     margin-top: 55px;
 
@@ -28,12 +25,12 @@ const ContentWrapper = styled.div`
     }
 `;
 
-// Título da programação
 const Title = styled.h2`
     font-size: 2.8rem;
     font-weight: 600;
     color: rgba(254, 207, 3, 0.9);
     letter-spacing: 0.05rem;
+    margin-bottom: 20px;
 
     @media (max-width: 768px) {
         font-size: 1.5rem;
@@ -41,41 +38,46 @@ const Title = styled.h2`
     }
 `;
 
-// Estilização da lista de eventos
+const Subtitle = styled.p`
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #ddd;
+
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+`;
+
 const EventList = styled.div`
     display: flex;
     justify-content: center;
     gap: 40px;
-    margin-bottom: 0px;
+    margin-bottom: 20px; // Aumentado para melhor espaçamento
 
     @media (max-width: 768px) {
         margin: 0 auto;
         flex-wrap: wrap;
+        gap: 20px; // Menor espaçamento em telas menores
     }
 `;
 
-// Estilização do card de eventos
 const EventCard = styled.div`
     position: relative;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border: 1px solid rgba(254, 207, 3, 0.3);
+    border: 1px solid rgba(254, 207, 3, 0.5); // Bordas mais visíveis
     border-radius: 20px;
     padding: 30px;
     margin: 15px;
     width: 40%;
     max-width: 350px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    height: 580px; // Define a altura fixa para uniformizar os cards
-     position: relative;
-  overflow: hidden; /* Para evitar que a mídia ultrapasse os limites do card */
-  transition: transform 0.3s ease; /* Transição suave para o aumento */
-
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 580px;
 
     &:hover {
         background: rgba(255, 255, 255, 0.3);
-        transform: scale(1.05); /* Aumenta o card um pouco no hover */
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 3px 3px rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     }
 
     @media (max-width: 768px) {
@@ -84,7 +86,6 @@ const EventCard = styled.div`
     }
 `;
 
-// Estilização da data do evento
 const EventDate = styled.h3`
     margin: 0;
     font-size: 26px;
@@ -95,29 +96,24 @@ const EventDate = styled.h3`
     text-transform: uppercase;
     background: linear-gradient(90deg, rgba(254, 207, 3, 0.8), rgba(255, 255, 255, 0.2));
     -webkit-background-clip: text;
+    margin-bottom: 10px; // Espaçamento adicionado
 
     @media (max-width: 768px) {
         font-size: 22px;
     }
 `;
 
-// Estilização do flyer e do vídeo
 const Media = styled.div`
     width: 100%;
-    height: 400px; // Define a altura para uniformizar a mídia
+    height: 400px; 
     margin: 20px 0 25px;
     overflow: hidden;
     border-radius: 16px;
-      transition: transform 0.3s ease; /* Transição suave para a mídia */
-
-      ${EventCard}:hover & {
-        transform: scale(1.05); /* Aumenta a mídia também no hover */
-      }
 
     img, video {
         width: 100%;
         height: 100%;
-        object-fit: cover; // Faz com que a imagem ou vídeo se ajuste sem distorção
+        object-fit: cover; 
         transition: transform 0.3s ease;
 
         &:hover {
@@ -127,21 +123,18 @@ const Media = styled.div`
     }
 `;
 
-// Estilização do botão de reserva
 const ReserveButton = styled.button`
     background-color: #fecf03;
-    color: #000000;
+    color: #000;
     padding: 15px 30px;
     border: none;
     border-radius: 12px;
-    text-decoration: none;
     font-weight: bold;
     font-size: 18px;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px rgba(254, 207, 3, 0.3);
     cursor: pointer;
-    margin-bottom: 25px ;
-
+    margin-bottom: 25px;
 
     &:hover {
         background-color: #e6b600;
@@ -150,7 +143,6 @@ const ReserveButton = styled.button`
     }
 `;
 
-// Estilização da mensagem de ausência de eventos
 const NoEvents = styled.div`
     display: flex;
     justify-content: center;
@@ -165,7 +157,6 @@ const NoEvents = styled.div`
     margin: 20px;
 `;
 
-// Componente Overlay
 const Overlay = styled.div<{ title: string }>`
     position: absolute;
     top: 0;
@@ -189,18 +180,6 @@ const Overlay = styled.div<{ title: string }>`
 
 
 
-
-// Estilização do subtítulo
-const Subtitle = styled.p`
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-    color: #ddd;
-
-    @media (max-width: 768px) {
-        font-size: 18px;
-        margin-bottom: 20px;
-    }
-`;
 
 
 // Definição da interface para Flyers
