@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaTwitter, FaWhatsapp } from 'react-icons/fa';
 
 const PageContainer = styled.div`
-  background-color: #0d0d0d; /* Preto suave */
+  background-color: #0d0d0d;
   color: #fecf03;
   padding: 6rem 2rem;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -48,7 +48,6 @@ const Subtitle = styled.p`
   }
 `;
 
-
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,7 +82,7 @@ const StyledForm = styled.form`
   margin-bottom: 3rem;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr; /* Torna os elementos em uma única coluna no mobile */
+    grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
 `;
@@ -112,8 +111,8 @@ const StyledTextArea = styled.textarea`
   }
 
   @media (max-width: 768px) {
-    grid-column: 1; /* Ajusta o textarea para a primeira coluna no mobile */
-    grid-row: 3;    /* Move o textarea para depois dos inputs */
+    grid-column: 1;
+    grid-row: 3;
   }
 `;
 
@@ -143,8 +142,8 @@ const StyledButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    grid-column: 1; /* Ajusta o botão para a primeira coluna no mobile */
-    grid-row: 4;    /* Move o botão para depois do textarea */
+    grid-column: 1;
+    grid-row: 4;
   }
 `;
 
@@ -180,23 +179,52 @@ const SocialMediaLink = styled.a`
     transform: translateY(-2px);
   }
 `;
+
 const Contact: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
+  const [celular, setCelular] = useState('');
   const [mensagem, setMensagem] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Formulário enviado', { nome, email, telefone, mensagem });
-    setNome('');
-    setEmail('');
-    setTelefone('');
-    setMensagem('');
+
+    const formData = {
+      name: nome,
+      email,
+      celular,
+      message: mensagem,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/contato', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSuccess('Mensagem enviada com sucesso!');
+        setError(null);  // Limpar mensagem de erro se o envio for bem-sucedido
+        setNome('');
+        setEmail('');
+        setCelular('');
+        setMensagem('');
+      } else {
+        throw new Error('Falha ao enviar mensagem');
+      }
+    } catch (error) {
+      setError('Erro ao enviar o formulário. Tente novamente mais tarde.');
+      setSuccess(null);  // Limpar mensagem de sucesso se ocorrer um erro
+    }
   };
 
   return (
-    <PageContainer>
+    <PageContainer id='contact'>
       <ContentWrapper>
         <Title>CONTATO</Title>
         <Subtitle>PRECISA DE AJUDA OU TEM ALGUMA DÚVIDA? ENTRE EM CONTATO CONOSCO.</Subtitle>
@@ -219,8 +247,8 @@ const Contact: React.FC = () => {
             <StyledInput
               type="tel"
               placeholder="SEU TELEFONE"
-              value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
+              value={celular}
+              onChange={(e) => setCelular(e.target.value)}
               required
             />
           </InputGroup>
@@ -232,18 +260,24 @@ const Contact: React.FC = () => {
           />
           <StyledButton type="submit">ENVIAR</StyledButton>
         </StyledForm>
-        
+
+        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+        {success && <p style={{ color: 'green', textAlign: 'center' }}>{success}</p>}
+
         <SocialMediaContainer>
           <SocialMediaTitle>SIGA-NOS NAS REDES SOCIAIS</SocialMediaTitle>
           <SocialMediaLinks>
-            <SocialMediaLink href="https://facebook.com/mahaubar" target="_blank" rel="noopener noreferrer">
-              <FaFacebookF />
+            <SocialMediaLink href="https://api.whatsapp.com/send?phone=5581998991105" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp />
             </SocialMediaLink>
             <SocialMediaLink href="https://instagram.com/mahaubar" target="_blank" rel="noopener noreferrer">
               <FaInstagram />
             </SocialMediaLink>
             <SocialMediaLink href="https://twitter.com/mahaubarsp" target="_blank" rel="noopener noreferrer">
               <FaTwitter />
+            </SocialMediaLink>
+            <SocialMediaLink href="https://www.facebook.com/mahaubar" target="_blank" rel="noopener noreferrer">
+              <FaFacebookF />
             </SocialMediaLink>
           </SocialMediaLinks>
         </SocialMediaContainer>

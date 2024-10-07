@@ -278,6 +278,7 @@ const Header: React.FC = () => {
                         <li><a href="#life" onClick={closeMenu}>Life</a></li>
                         <li><a href="#programacao" onClick={closeMenu}>Programação</a></li>
                         <li><a href="#gallery" onClick={closeMenu}>Galeria</a></li>
+                        <li><a href="#reservas" onClick={closeMenu}>Reservas</a></li>
                         <li><a href="#contact" onClick={closeMenu}>Contato</a></li>
                     </ul>
                     <div className="close-icon" onClick={closeMenu}>&times;</div>
