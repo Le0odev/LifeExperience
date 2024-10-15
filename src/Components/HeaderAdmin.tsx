@@ -192,6 +192,11 @@ const HeaderAdmin: React.FC = () => {
                                 Gallery Admins
                             </a>
                         </li>
+                        <li>
+                            <a href="/admin/contatos" className={activeSection === 'responses' ? 'active' : ''}>
+                                Contatos
+                            </a>
+                        </li>
                     </ul>
                 </Nav>
                 <Hamburger onClick={toggleMenu} isOpen={isOpen} aria-label="Toggle menu" aria-expanded={isOpen}>

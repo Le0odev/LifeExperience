@@ -1,162 +1,266 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { FaFileUpload } from 'react-icons/fa'; // Ícone de upload
+import { AiOutlineCalendar, AiOutlineLink } from 'react-icons/ai'; // Ícones de calendário e link
+import { FiLoader } from 'react-icons/fi'; // Ícone de carregamento
+
 import HeaderAdmin from './HeaderAdmin';
 
-
-const Container = styled.div`
-  max-width: 500px;
-  width: 100%;
-  padding: 40px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #1e1e1e, #111);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  border: 1px solid #ffc107; /* Amarelo */
-  margin-bottom: 90px;
-
+// Contêiner Externo
+export const OuterContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  height: 100%;
+  height: 100vh;
+  background-color: #121212;
   @media (max-width: 768px) {
-    margin-bottom: 100px;
+    padding: 15px;
   }
 `;
 
-// Estilos dos Títulos e Entradas
-const Title = styled.h2`
-  color: #ffc107; /* Amarelo */
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 30px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-`;
-
-const Input = styled.input`
+// Contêiner Principal
+export const Container = styled.div`
   width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-size: 18px;
-  background-color: #333;
-  color: #fff;
-  transition: all 0.3s ease;
-
-  &:focus {
-    border-color: #ffc107; /* Amarelo */
-    background-color: #444;
-    box-shadow: 0 0 5px #ffc107;
-    outline: none;
-  }
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-size: 18px;
-  background-color: #333;
-  color: #fff;
-  appearance: none;
-  transition: all 0.3s ease;
-
-  &:focus {
-    border-color: #ffc107; /* Amarelo */
-    background-color: #444;
-    box-shadow: 0 0 5px #ffc107;
-    outline: none;
-  }
-`;
-
-// Estilos do Botão
-const Button = styled.button<{ disabled: boolean }>`
-  width: 100%;
-  padding: 15px;
-  margin-top: 20px;
-  background-color: ${({ disabled }) => (disabled ? '#555' : '#ffc107')}; /* Amarelo */
-  color: #000; /* Preto */
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4); /* Amarelo */
-  transition: all 0.3s ease;
+  max-width: 600px;
+  background-color: #1e1e1e;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  border: 2px solid rgba(254, 207, 3, 0.8);
+  transition: transform 0.3s, box-shadow 0.3s;
 
   &:hover {
-    background-color: ${({ disabled }) => (disabled ? '#555' : '#e0a800')}; /* Amarelo mais escuro */
-    box-shadow: ${({ disabled }) =>
-      disabled ? 'none' : '0 6px 15px rgba(255, 193, 7, 0.6)'};
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 20px;
   }
 `;
 
-// Estilos das Mensagens
-const SuccessMessage = styled.p`
-  color: #00ff7f;
+// Título
+export const Title = styled.h1`
+  font-size: 30px;
+  color: rgba(254, 207, 3, 0.9);
+  margin-bottom: 25px;
   text-align: center;
-  margin-top: 15px;
-  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 `;
 
-const ErrorMessage = styled.p`
-  color: red;
-  text-align: center;
-  margin-top: 15px;
-  font-weight: bold;
-`;
-
-// Estilos dos Logs
-const LogHistory = styled.div`
-  margin-top: 20px;
-  padding: 20px;
-  border: 0.5px solid #ffc107; /* Amarelo */
-  border-radius: 8px;
-  background-color: #222;
-  color: #fff;
-  text-align: left;
-  max-height: 300px; /* Aumentado para dar mais espaço */
-  overflow-y: auto;
-`;
-
-const LogEntry = styled.div`
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #333;
-  border-radius: 6px;
-`;
-
-const LogText = styled.p`
-  font-size: 14px;
-  color: #fff;
-  margin: 0;
-  word-wrap: break-word;
-`;
-// Estilos do Container Principal
-const OuterContainer = styled.section`
-  background-color: #000;
-  min-height: 100vh;
+// Contêiner de Input com Ícone
+export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  background-color: #333;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 15px;
 `;
 
-// O restante do seu código de estilo permanece o mesmo...
+export const Icon = styled.span`
+  color: rgba(254, 207, 3, 1);
+  margin-right: 10px;
+  font-size: 18px;
+`;
+
+// Estilo de Entrada
+export const Input = styled.input`
+  flex: 1;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+
+  &:focus {
+    border-color: rgba(254, 207, 3, 1);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+export const Select = styled.select`
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  font-size: 16px;
+
+  &:focus {
+    border-color: rgba(254, 207, 3, 1);
+    outline: none;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+// Estilo customizado do input de arquivo
+export const FileInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #333;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+`;
+
+export const FileInputLabel = styled.label`
+  background-color: rgba(254, 207, 3, 1);
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(254, 207, 3, 0.8);
+  }
+`;
+
+export const FileName = styled.span`
+  color: #fff;
+  margin-left: 15px;
+  font-size: 14px;
+`;
+
+// Estilo de Botão
+export const Button = styled.button`
+  width: 100%;
+  padding: 15px;
+  background-color: rgba(254, 207, 3, 1);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(254, 207, 3, 0.8);
+    transform: scale(1.03);
+  }
+
+  &:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+export const SuccessMessage = styled.div`
+  color: #28a745;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+`;
+
+export const ErrorMessage = styled.div`
+  color: #dc3545;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+`;
+
+// Histórico de Logs
+export const LogHistory = styled.div`
+  margin-top: 30px;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #222;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+`;
+
+export const LogEntry = styled.div`
+  padding: 10px;
+  border-bottom: 1px solid #444;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(254, 207, 3, 0.1);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const LogText = styled.p`
+  margin: 5px 0;
+  color: rgba(254, 207, 3, 1);
+  font-size: 14px;
+`;
+
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+export const PaginationButton = styled.button`
+  background-color: rgba(254, 207, 3, 1);
+  border: none;
+  color: black;
+  padding: 10px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(254, 207, 3, 0.8);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+
+export const PageInfo = styled.span`
+  color: #fff;
+  margin: 0 10px;
+  font-size: 14px;
+`;
 
 // Componente Principal
-const MidiaUpload: React.FC = () => {
+const MediaUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [mediaTitle, setMediaTitle] = useState<string>('');
   const [mediaDescription, setMediaDescription] = useState<string>('');
-  const [title, setTitle] = useState<string>(''); // Novo estado para title
-  const [date, setDate] = useState<string>(''); // Novo estado para date
+  const [mediaDate, setMediaDate] = useState<string>(''); 
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+  const [uploadDate, setUploadDate] = useState<string | null>(null);
   const [error, setError] = useState<string>('');
-  const [logs, setLogs] = useState<{ description: string; date: string }[]>([]);
+  const [logs, setLogs] = useState<{ title: string; description: string; date: string }[]>([]);
 
   useEffect(() => {
-    const storedLogs = localStorage.getItem('mediaUploadLogs');
+    const storedLogs = localStorage.getItem('uploadMediaLogs');
     if (storedLogs) {
       setLogs(JSON.parse(storedLogs));
     }
@@ -169,51 +273,47 @@ const MidiaUpload: React.FC = () => {
   };
 
   const handleUpload = async () => {
-    if (!file || !mediaDescription) {
+    if (!file || !mediaTitle || !mediaDescription || !mediaDate) {
       setError('Por favor, preencha todas as informações.');
       return;
     }
-  
+
     setLoading(true);
     setError('');
     setSuccess(false);
-  
+
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('name', mediaDescription); // Você deve usar os campos corretos
-      formData.append('type', 'image'); // Ou o tipo que você está lidando
-      formData.append('title', 'Título da Mídia'); // Substitua por uma variável ou estado se necessário
-      formData.append('date', new Date().toISOString()); // Formato ISO ou outro formato que você precisa
-  
-      // Inspecionar o FormData antes de enviar
-      console.log(Array.from(formData.entries()));
-  
-      const response = await axios.post('https://backendlife-production.up.railway.app/upload-gallery-media', formData, {
+      formData.append('title', mediaTitle);
+      formData.append('description', mediaDescription);
+      formData.append('date', mediaDate);
+
+      await axios.post('https://backendlife-production.up.railway.app/upload-media', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
-      // Verifique a estrutura da resposta do servidor
-      const { id, name } = response.data; // Suponha que o servidor retorne um objeto com id e nome
+
       const currentDate = new Date().toLocaleString('pt-BR');
-      const newLog = { description: name || mediaDescription, date: currentDate }; // Usar name do response ou mediaDescription
+      setUploadDate(currentDate);
+
+      const newLog = { title: mediaTitle, description: mediaDescription, date: currentDate };
       const updatedLogs = [...logs, newLog];
       setLogs(updatedLogs);
-      localStorage.setItem('mediaUploadLogs', JSON.stringify(updatedLogs));
-  
+      localStorage.setItem('uploadMediaLogs', JSON.stringify(updatedLogs));
+
       setSuccess(true);
+      setMediaTitle('');
       setMediaDescription('');
       setFile(null);
+      setMediaDate('');
     } catch (error) {
-      setError('Erro ao enviar o arquivo. Verifique o console para mais detalhes.');
-      console.error(error); // Adicione esta linha para verificar o erro no console
+      setError('Erro ao enviar o arquivo.');
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -221,41 +321,67 @@ const MidiaUpload: React.FC = () => {
       <OuterContainer id='gallery'>
         <Container>
           <Title>Envio de Mídia</Title>
-          <Input 
-            type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            placeholder="Título da Mídia" 
-          />
-          <Input 
-            type="text" 
-            value={mediaDescription} 
-            onChange={(e) => setMediaDescription(e.target.value)} 
-            placeholder="Descrição da Mídia" 
-          />
-          <Input 
-            type="date" 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-            placeholder="Data" 
-          />
-          <Input type="file" onChange={handleFileChange} />
-          <Button disabled={loading} onClick={handleUpload}>
-            {loading ? 'Enviando...' : 'Enviar Mídia'}
+          <InputContainer>
+            <Icon><AiOutlineLink /></Icon>
+            <Input
+              type="text"
+              placeholder="Título da Mídia"
+              value={mediaTitle}
+              onChange={(e) => setMediaTitle(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Icon><AiOutlineLink /></Icon>
+            <Input
+              type="text"
+              placeholder="Descrição da Mídia"
+              value={mediaDescription}
+              onChange={(e) => setMediaDescription(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Icon><AiOutlineCalendar /></Icon>
+            <Input
+              type="text"
+              placeholder="dd/mm/aaaa"
+              value={mediaDate}
+              onChange={(e) => setMediaDate(e.target.value)}
+            />
+          </InputContainer>
+
+          {/* Customização do input de arquivo */}
+          <FileInputContainer>
+            <FileInputLabel htmlFor="file-upload">
+              <FaFileUpload /> Escolher arquivo
+            </FileInputLabel>
+            <input
+              id="file-upload"
+              type="file"
+              style={{ display: 'none' }} // Esconder o input padrão
+              onChange={handleFileChange}
+            />
+            <FileName>{file ? file.name : 'Nenhum arquivo selecionado'}</FileName>
+          </FileInputContainer>
+
+          <Button onClick={handleUpload} disabled={loading}>
+            {loading ? <FiLoader /> : 'Enviar Mídia'}
           </Button>
-          {success && <SuccessMessage>Mídia enviada com sucesso!</SuccessMessage>}
+          {success && <SuccessMessage>Mídia enviada com sucesso! Data: {uploadDate}</SuccessMessage>}
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <LogHistory>
-            {logs.map((log, index) => (
-              <LogEntry key={index}>
-                <LogText>{`Descrição: ${log.description}, Data: ${log.date}`}</LogText>
-              </LogEntry>
-            ))}
-          </LogHistory>
+
+          {logs.length > 0 && (
+            <LogHistory>
+              {logs.map((log, index) => (
+                <LogEntry key={index}>
+                  <LogText>Descrição: {log.description}, Data: {log.date}</LogText>
+                </LogEntry>
+              ))}
+            </LogHistory>
+          )}
         </Container>
       </OuterContainer>
     </>
   );
 };
 
-export default MidiaUpload;
+export default MediaUpload;

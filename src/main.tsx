@@ -15,6 +15,7 @@ import GallerySection from './Components/Gallery.tsx';
 import MidiaUpload from './Components/MidiaUpload.tsx';
 import Reservas from './Components/Reservas.tsx';
 import Contact from './Components/Contact.tsx';
+import ContactResponses from './Components/ContactResponses.tsx';
 
 
 // Componente para renderizar Header, Home e Programacao com base na localização
@@ -33,7 +34,7 @@ const App = () => {
   return (
     <>
       {/* Renderiza apenas se não estiver na rota /admin */}
-      {location.pathname !== '/admin' && location.pathname !== '/admin/media' && (
+      {location.pathname !== '/admin' && location.pathname !== '/admin/media'  && location.pathname !== '/admin/contatos' && (
         <>
           <Header />
           <Home />
@@ -47,6 +48,8 @@ const App = () => {
       <Routes>
         <Route path="/admin" element={user ? <FlyerUpload /> : <Login setUser={setUser} />} />
         <Route path="/admin/media" element={user ? <MidiaUpload /> : <Login setUser={setUser} />} /> 
+        <Route path="/admin/contatos" element={user ? <ContactResponses /> : <Login setUser={setUser} />} /> 
+
       </Routes>
 
     </>
