@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-
 const HeaderContainer = styled.header`
     width: 100%;
     color: #fecf03; /* Amarelo */
@@ -94,9 +93,10 @@ const Hamburger = styled.button<{ isOpen: boolean }>`
 
     div {
         width: 100%;
-        height: 4px;
+        height: 3px;
         background-color: #fecf03;
-        transition: all 0.3s ease;
+        border-radius: 2px;
+        transition: all 0.3s ease-in-out;
         transform-origin: 1px;
 
         &:nth-child(1) {
@@ -119,12 +119,16 @@ const Hamburger = styled.button<{ isOpen: boolean }>`
 const MobileNav = styled.nav<{ isOpen: boolean }>`
     display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
     position: absolute;
-    margin-top: 10px;
     top: 60px;
     right: 0;
     width: 100%;
+    background-color: rgba(0, 0, 0, 0.95); /* Fundo mais translúcido */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra mais suave */
+    border-radius: 8px;
+    padding: 20px 0;
     text-align: center;
-    background-color: #000;
+    transition: all 0.4s ease-in-out;
+    transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(-100%)')};
 
     ul {
         list-style: none;
@@ -132,14 +136,17 @@ const MobileNav = styled.nav<{ isOpen: boolean }>`
         margin: 0;
 
         li {
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
         a {
             color: #fecf03;
             text-decoration: none;
             font-weight: 600;
+            font-size: 18px; /* Aumentando a fonte */
+            transition: color 0.2s ease-in-out;
             &:hover {
+                color: #fff; /* Efeito de hover para maior contraste */
                 text-decoration: underline;
             }
         }
@@ -177,8 +184,8 @@ const HeaderAdmin: React.FC = () => {
         <HeaderContainer>
             <ContentWrapper>
                 <LogoContainer>
-                    <LogoImage src="src/assets/LIFE-4.webp" alt="Logo" />
-                    <LogoText>Life Admin</LogoText>
+                <LogoImage src="/src/assets/LIFE-4.webp" alt="Logo" />
+                <LogoText>Life Admin</LogoText>
                 </LogoContainer>
                 <Nav>
                     <ul>
@@ -207,13 +214,18 @@ const HeaderAdmin: React.FC = () => {
                 <MobileNav isOpen={isOpen}>
                     <ul>
                         <li>
-                            <a href="#home" onClick={() => setIsOpen(false)}>
+                            <a href="/admin" onClick={() => setIsOpen(false)}>
                                 Flyer Admins
                             </a>
                         </li>
                         <li>
-                            <a href="#gallery" onClick={() => setIsOpen(false)}>
+                            <a href="/admin/media" onClick={() => setIsOpen(false)}>
                                 Gallery Admins
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/contatos" onClick={() => setIsOpen(false)}>
+                                Contatos
                             </a>
                         </li>
                     </ul>

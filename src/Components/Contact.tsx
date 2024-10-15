@@ -95,8 +95,9 @@ const StyledTextArea = styled.textarea`
   background-color: rgba(255, 255, 255, 0.05);
   color: #ffffff;
   font-size: 0.9rem;
-  resize: none;
+  resize: none; /* Impede o redimensionamento manual */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Ocupa toda a largura disponível */
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.5);
@@ -110,9 +111,14 @@ const StyledTextArea = styled.textarea`
     box-shadow: 0 0 0 2px rgba(254, 207, 3, 0.2);
   }
 
+  /* Definindo altura mínima e máxima */
+  min-height: 150px;
+  max-height: 400px; /* Evita que o textarea cresça demais */
+
   @media (max-width: 768px) {
     grid-column: 1;
     grid-row: 3;
+    width: 100%; /* Garante que o textarea ocupe toda a largura da tela pequena */
   }
 `;
 
@@ -199,7 +205,7 @@ const Contact: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/contato', {
+      const response = await fetch('https://backendlife-production.up.railway.app/contato', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -262,7 +268,7 @@ const Contact: React.FC = () => {
         </StyledForm>
 
         {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-        {success && <p style={{ color: 'green', textAlign: 'center' }}>{success}</p>}
+        {success && <p style={{ color: 'green', textAlign: 'center', margin: 20 }}>{success}</p>}
 
         <SocialMediaContainer>
           <SocialMediaTitle>SIGA-NOS NAS REDES SOCIAIS</SocialMediaTitle>

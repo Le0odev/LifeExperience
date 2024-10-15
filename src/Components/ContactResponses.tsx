@@ -14,7 +14,7 @@ export const OuterContainer = styled.div`
   min-height: 100vh;
   background: #2f2f2f; /* Cor sólida e sóbria */
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 20px 10px; /* Ajustar padding para telas pequenas */
   }
 `;
 
@@ -32,7 +32,51 @@ export const Container = styled.div`
   transition: all 0.2s ease-in-out;
 
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 20px 15px; /* Aumentando padding no mobile */
+  }
+`;
+
+
+
+
+// Estilo para a mensagem
+export const MessageSection = styled.div`
+  background: #4d4d4d; /* Um fundo levemente mais claro */
+  padding: 20px;
+  border-radius: 8px;
+  flex-basis: 48%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 300px;
+  max-width: 500px; /* Define um limite de largura máxima */
+  overflow-wrap: break-word; /* Garante a quebra correta de linhas */
+  
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    margin-top: 20px;
+  }
+`;
+
+// Estilo para o texto da mensagem
+export const MessageText = styled.p`
+  color: #dcdcdc;
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+  font-weight: 400;
+  word-wrap: break-word; /* Força a quebra de linha em palavras longas */
+  word-break: break-word; /* Garante que as palavras longas quebrem corretamente */
+  display: flex;
+  align-items: center;
+  max-width: 100%; /* Garante que o texto respeite o tamanho do container */
+
+  svg {
+    margin-right: 10px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 15px; /* Ajuste fino para telas menores */
   }
 `;
 
@@ -46,6 +90,10 @@ export const Title = styled.h1`
   letter-spacing: 1px;
   text-transform: uppercase;
 `;
+
+
+
+
 
 // Cartão estilizado para cada contato
 export const ContactCard = styled.div`
@@ -62,7 +110,13 @@ export const ContactCard = styled.div`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra levemente mais suave */
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
@@ -85,7 +139,7 @@ export const InfoRow = styled.div`
 `;
 
 export const InfoIcon = styled.span`
-  color: #f1c40f; /* Um amarelo mais neutro */
+  color: #f1c40f;
   margin-right: 10px;
   font-size: 20px;
 `;
@@ -95,32 +149,22 @@ export const InfoText = styled.p`
   font-size: 16px;
   font-weight: 500;
   margin: 0;
-`;
-
-// Estilo para a mensagem
-export const MessageSection = styled.div`
-  background: #4d4d4d; /* Um fundo levemente mais claro */
-  padding: 20px;
-  border-radius: 8px;
-  flex-basis: 48%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-width: 300px;
+  line-height: 1.4;
 
   @media (max-width: 768px) {
-    flex-basis: 100%;
-    margin-top: 20px;
+    font-size: 14px; /* Ajuste fino no mobile */
   }
 `;
 
-export const MessageText = styled.p`
-  color: #dcdcdc;
-  font-size: 16px;
+
+
+export const MessageDate = styled.p`
+  color: #b3b3b3;
+  font-size: 14px;
   margin: 0;
-  line-height: 1.5;
-  font-weight: 400;
+  text-align: right;
 `;
+
 
 // Contêiner de Paginação
 export const PaginationContainer = styled.div`
@@ -239,20 +283,20 @@ const ContactResponses: React.FC = () => {
                 <InfoSection>
                   <InfoRow>
                     <InfoIcon><AiOutlineUser /></InfoIcon>
-                    <InfoText>Nome: {contact.name}</InfoText>
+                    <InfoText> {contact.name}</InfoText>
                   </InfoRow>
                   <InfoRow>
                     <InfoIcon><AiOutlineMail /></InfoIcon>
-                    <InfoText>E-mail: {contact.email}</InfoText>
+                    <InfoText> {contact.email}</InfoText>
                   </InfoRow>
                   <InfoRow>
                     <InfoIcon><AiOutlinePhone /></InfoIcon>
-                    <InfoText>Telefone: {contact.celular}</InfoText>
+                    <InfoText> {contact.celular}</InfoText>
                   </InfoRow>
                 </InfoSection>
                 <MessageSection>
                   <MessageText><AiOutlineMessage /> {contact.message}</MessageText>
-                  <InfoText>Enviado em: {contact.createdAt}</InfoText>
+                  <MessageDate>Enviado em: {contact.createdAt}</MessageDate>
                 </MessageSection>
               </ContactCard>
             ))
