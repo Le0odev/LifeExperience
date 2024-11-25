@@ -9,8 +9,8 @@ const ProgramacaoContainer = styled.section`
     text-align: center;
     height: 100vh;
     overflow: auto;
-    border-top: 1px solid #fecf03;
-    border-bottom: 1px solid #fecf03;
+    border-top:  1px solid #333;
+    border-bottom:  1px solid #333;
 
     @media (max-width: 768px) {
         height: auto;

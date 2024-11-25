@@ -16,24 +16,22 @@ import MidiaUpload from './Components/MidiaUpload.tsx';
 import Reservas from './Components/Reservas.tsx';
 import Contact from './Components/Contact.tsx';
 import ContactResponses from './Components/ContactResponses.tsx';
+import Footer from './Components/Footer.tsx';
 
 
-// Componente para renderizar Header, Home e Programacao com base na localização
 const App = () => {
-  const [user, setUser] = useState<any>(null); // Estado para armazenar o usuário
+  const [user, setUser] = useState<any>(null); 
   const location = useLocation();
 
-  // Verifica se o usuário está autenticado
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user); // Armazena o usuário autenticado
+      setUser(user); 
     });
-    return () => unsubscribe(); // Limpa o listener
+    return () => unsubscribe(); 
   }, []);
 
   return (
     <>
-      {/* Renderiza apenas se não estiver na rota /admin */}
       {location.pathname !== '/admin' && location.pathname !== '/admin/media'  && location.pathname !== '/admin/contatos' && (
         <>
           <Header />
@@ -43,6 +41,7 @@ const App = () => {
           <GallerySection />
           <Reservas />
           <Contact />
+          <Footer />
         </>
       )}
       <Routes>

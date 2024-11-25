@@ -14,6 +14,7 @@ const GalleryContainer = styled.section`
     display: block;
     flex-direction: column;
     justify-content: center;
+    border-bottom:  1px solid #333;
 
     @media (max-width: 768px) {
         height: 100vh;
@@ -211,7 +212,7 @@ const GallerySection: React.FC = () => {
         <GalleryContainer id='gallery'>
             <ContentWrapper>
                 <SectionTitle>FEEL THE EXPERIENCE</SectionTitle>
-                <SectionSubtitle>Veja os melhores momentos dos nossos eventos anteriores!</SectionSubtitle>
+                <SectionSubtitle>Veja os melhores momentos dos nossos eventos!</SectionSubtitle>
                 <Slider {...settings}>
                     {events.map((event, index) => (
                         <GalleryItem 

@@ -270,23 +270,7 @@ const Contact: React.FC = () => {
         {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
         {success && <p style={{ color: 'green', textAlign: 'center', margin: 20 }}>{success}</p>}
 
-        <SocialMediaContainer>
-          <SocialMediaTitle>SIGA-NOS NAS REDES SOCIAIS</SocialMediaTitle>
-          <SocialMediaLinks>
-            <SocialMediaLink href="https://api.whatsapp.com/send?phone=5581998991105" target="_blank" rel="noopener noreferrer">
-              <FaWhatsapp />
-            </SocialMediaLink>
-            <SocialMediaLink href="https://instagram.com/mahaubar" target="_blank" rel="noopener noreferrer">
-              <FaInstagram />
-            </SocialMediaLink>
-            <SocialMediaLink href="https://twitter.com/mahaubarsp" target="_blank" rel="noopener noreferrer">
-              <FaTwitter />
-            </SocialMediaLink>
-            <SocialMediaLink href="https://www.facebook.com/mahaubar" target="_blank" rel="noopener noreferrer">
-              <FaFacebookF />
-            </SocialMediaLink>
-          </SocialMediaLinks>
-        </SocialMediaContainer>
+      
       </ContentWrapper>
     </PageContainer>
   );

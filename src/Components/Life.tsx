@@ -83,7 +83,7 @@
   `;
 
   const Separator = styled.hr`
-    border: 1px solid #ffcc00; /* Cor do separador */
+    border:  1px solid #333; /* Cor do separador */
     margin: 20px 0; /* Espaçamento acima e abaixo */
   `;
 
