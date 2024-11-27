@@ -26,7 +26,7 @@ const Title = styled.h1`
   font-size: 4rem;
   text-align: center;
   margin-bottom: 0.5rem;
-  color: #ffffff;
+  color: #fecf03;
   letter-spacing: 2px;
   font-weight: 700;
 
@@ -39,7 +39,7 @@ const Subtitle = styled.p`
   font-size: 1rem;
   text-align: center;
   margin-bottom: 3rem;
-  color: #fecf03;
+  color: #ffffff;
   letter-spacing: 1px;
 
   @media (max-width: 768px) {

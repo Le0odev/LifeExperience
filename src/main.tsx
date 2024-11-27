@@ -6,16 +6,16 @@ import './index.css';
 import Header from './Components/Header.tsx';
 import Home from './Components/Home.tsx';
 import Programacao from './Components/Programacao.tsx';
-import FlyerUpload from './Components/FlyerUpload.tsx';
-import Login from './Components/Login.tsx'; // Certifique-se de que este import está correto
+import FlyerUpload from './Components/admin/FlyerUpload.tsx';
+import Login from '../src/Components/admin/Login.tsx'; // Certifique-se de que este import está correto
 import { auth } from './Config/firebase'; // Importe o auth do Firebase
 import { onAuthStateChanged } from 'firebase/auth'; // Importe a função para monitorar mudanças de autenticação
 import Life from './Components/Life.tsx';
 import GallerySection from './Components/Gallery.tsx';
-import MidiaUpload from './Components/MidiaUpload.tsx';
+import MidiaUpload from './Components/admin/MidiaUpload.tsx';
 import Reservas from './Components/Reservas.tsx';
 import Contact from './Components/Contact.tsx';
-import ContactResponses from './Components/ContactResponses.tsx';
+import ContactResponses from './Components/admin/ContactResponses.tsx';
 import Footer from './Components/Footer.tsx';
 
 

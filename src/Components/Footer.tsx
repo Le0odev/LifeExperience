@@ -1,6 +1,7 @@
 
 import styled from 'styled-components';
 import { FaWhatsapp, FaInstagram, FaTwitter,  FaCode, FaLinkedin, FaMapMarkerAlt, FaClock, FaUserClock } from 'react-icons/fa';
+import { SiGooglemaps } from 'react-icons/si';
 
 const FooterWrapper = styled.footer`
   background-color: #0d0d0d;
@@ -221,9 +222,8 @@ const Footer = () => {
             <SocialIcon href="https://instagram.com/lifeexperience" target="_blank" rel="noopener noreferrer">
               <FaInstagram />
             </SocialIcon>
-            <SocialIcon href="https://twitter.com/lifeexperience" target="_blank" rel="noopener noreferrer">
-              <FaTwitter />
-            </SocialIcon>
+            <SocialIcon href="https://www.google.com/maps/place/Life+Experience/@-8.124186,-34.899323,15z/data=!4m6!3m5!1s0x7ab1fbae229edd3:0x99f59ea18b334c0b!8m2!3d-8.124186!4d-34.899323!16s%2Fg%2F11vk8lc11s?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank"><SiGooglemaps /> </SocialIcon>
+
           </SocialIcons>
         </SocialContainer>
       </FooterGrid>

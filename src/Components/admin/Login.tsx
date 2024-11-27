@@ -1,9 +1,9 @@
 // src/components/Login.tsx
 import React, { useState } from 'react';
-import { auth } from '../Config/firebase'; // Importe sua configuração do Firebase
+import { auth } from '../../Config/firebase'; // Importe sua configuração do Firebase
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import styled from 'styled-components';
-import Header from './Header';
+import HeaderAdmin from './HeaderAdmin';
 
 // Estilização com styled-components
 const Container = styled.div`
@@ -13,7 +13,6 @@ const Container = styled.div`
   background-color: black;
   color: yellow;
   min-height: 100vh;
-  justify-content: center;
   padding: 20px;
   
 `;
@@ -106,7 +105,7 @@ const Login: React.FC<{ setUser: (user: any) => void }> = ({ setUser }) => {
 
   return (
     <Container>
-        <Header />
+        <HeaderAdmin  />
       <Title>Login</Title>
       <Form onSubmit={handleLogin}>
         <Input

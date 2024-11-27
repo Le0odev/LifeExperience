@@ -42,33 +42,23 @@ const Subtitle = styled.p`
     
 `;
 
-// Botão de ação
 const Button = styled.button`
-    background-color: #ffcc00;
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: clamp(1rem, 2vw, 1.2rem); /* Tamanho do botão responsivo */
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s, transform 0.3s;
+background-color: #fecf03;
+  color: #000;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
     &:hover {
-        background-color: #e6b800; /* Cor mais escura ao passar o mouse */
-        transform: scale(1.05); /* Leve aumento no hover */
+      background-color: #e6b800; /* Cor mais escura ao passar o mouse */
     }
-
-    &:focus {
-        outline: 2px solid #ffcc00; /* Adiciona outline ao foco */
-        outline-offset: 4px; /* Distância do outline */
-    }
-
-    /* Responsividade para o botão */
-    @media (max-width: 768px) {
-        padding: 10px 20px; /* Ajuste de padding */
-    }
-`;
+  `;
 
 // Componente principal da página
 const Home: React.FC = () => {

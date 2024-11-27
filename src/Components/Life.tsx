@@ -1,4 +1,4 @@
-  import { FaRocket } from "react-icons/fa";
+  import { FaInstagram, FaRocket, FaWhatsapp } from "react-icons/fa";
   import { PiFlyingSaucerFill } from "react-icons/pi";
   import { SiGooglemaps, SiInstagram, SiWhatsapp } from "react-icons/si";
   import styled, { keyframes } from "styled-components";
@@ -107,22 +107,49 @@
     }
   `;
 
-  const SocialIconsContainer = styled.div`
-    margin-top: 20px;
-    display: flex;
-    gap: 10px; /* Espaço entre os ícones */
-  `;
+  
+const SocialContainer = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin-top: 16px;
 
-  const SocialIcon = styled.a`
-    color: #ffcc00;
-    font-size: 1.5rem;
-    transition: color 0.3s;
-    margin-left: 1px;
 
-    &:hover {
-      color: #e6b800; /* Cor mais escura ao passar o mouse */
-    }
-  `;
+@media (max-width: 768px) {
+    margin-top: 16px;
+    flex-direction: row;
+
+`;
+
+const SocialIcons = styled.div`
+display: flex;
+justify-content: center;
+gap: 1.5rem;
+
+@media (min-width: 768px) {
+  justify-content: flex-start;
+}
+`;
+
+const SocialIcon = styled.a`
+color: #ffffff;
+font-size: 1.5rem;
+transition: all 0.3s ease;
+padding: 0.5rem;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.1);
+display: flex;
+align-items: center;
+justify-content: center;
+width: 2.5rem;
+height: 2.5rem;
+
+&:hover {
+  color: #0d0d0d;
+  background: #fecf03;
+  transform: translateY(-3px);
+}
+`;
 
   const Life = () => {
     return (
@@ -159,16 +186,23 @@
             vão deixar você e seus amigos em êxtase.
           </Paragraph>
           <Button>Reserve seu lugar agora!</Button>
-          <SocialIconsContainer>
-            <SocialIcon href="https://www.instagram.com/lifeexperience___/" target="_blank"><SiInstagram /></SocialIcon>
-            <SocialIcon href="https://api.whatsapp.com/send?phone=5581998991105&fbclid=PAZXh0bgNhZW0CMTEAAab6-ylk4xcwgfgUorzqG3cQfAlv6pZbEBpcXqW7-J9RxCkJ1UjYjSnY7Yo_aem_4s7W00HUkvd1c6v9o4cGHg" target="_blank"><SiWhatsapp /></SocialIcon>
-            <SocialIcon href="https://www.google.com/maps/place/Life+Experience/@-8.124186,-34.899323,15z/data=!4m6!3m5!1s0x7ab1fbae229edd3:0x99f59ea18b334c0b!8m2!3d-8.124186!4d-34.899323!16s%2Fg%2F11vk8lc11s?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank"><SiGooglemaps />
-
+          <SocialContainer>
+          <SocialIcons>
+            <SocialIcon href="https://api.whatsapp.com/send?phone=5581998991105" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp />
             </SocialIcon>
-          </SocialIconsContainer>
+            <SocialIcon href="https://instagram.com/lifeexperience" target="_blank" rel="noopener noreferrer">
+              <FaInstagram />
+            </SocialIcon>
+            <SocialIcon href="https://www.google.com/maps/place/Life+Experience/@-8.124186,-34.899323,15z/data=!4m6!3m5!1s0x7ab1fbae229edd3:0x99f59ea18b334c0b!8m2!3d-8.124186!4d-34.899323!16s%2Fg%2F11vk8lc11s?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank"><SiGooglemaps /> </SocialIcon>
+
+          </SocialIcons>
+        </SocialContainer>
         </TextContainer>
       </Container>
     );
   };
 
+
+  
   export default Life;

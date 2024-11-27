@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import styled from 'styled-components';
-import { FaPhoneAlt, FaEnvelope, FaClock, FaWhatsapp } from 'react-icons/fa';
 
 // Estilos principais da seção de reservas
 const ReservasSection = styled.section`
@@ -127,6 +126,15 @@ const ReservasBotaoPrimario = styled.button`
   }
 `;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+`;
 const ReservasBotaoSecundario = styled.button`
   background-color: transparent;
   color: #fecf03;
@@ -302,6 +310,15 @@ const ReservarAgoraButton = styled.button`
 const Reservas = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+  const handleCloseModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement; // Garantimos que o target seja um HTMLElement
+    if (target.id === "modal-overlay") {
+      setIsModalOpen(false);
+    }
+  };
+  
+
   return (
     <>
       <ReservasSection id='reservas'>
@@ -320,11 +337,12 @@ const Reservas = () => {
       </ReservasSection>
 
       {isModalOpen && (
+        <ModalOverlay id="modal-overlay" onClick={handleCloseModal}>
         <ModalContainer>
           <ModalTitle>Celebrate in Life</ModalTitle>
           <ModalSubtitle>Aniversário</ModalSubtitle>
           <ModalContent>
-          <ModalBulletPoint>🎉 Comemore na Navezinha!</ModalBulletPoint>
+            <ModalBulletPoint>🎉 Comemore na Navezinha!</ModalBulletPoint>
             <ModalBulletPoint>🍹 Ganhe um camarote exclusivo!</ModalBulletPoint>
             <ModalBulletPoint>🥂 Bebida por nossa conta!</ModalBulletPoint>
             <ModalBulletPoint>👫 Você + acompanhante FREE!</ModalBulletPoint>
@@ -333,11 +351,20 @@ const Reservas = () => {
             <ModalBulletPoint>🚫 Isento de fila!</ModalBulletPoint>
           </ModalContent>
           <div>
-          <ModalText>Entre em contato para mais informações e reservas.</ModalText>
-          <CloseButton onClick={() => setIsModalOpen(false)}>Fechar</CloseButton>
-          <a href='https://api.whatsapp.com/send?phone=5581998991105&fbclid=PAZXh0bgNhZW0CMTEAAab6-ylk4xcwgfgUorzqG3cQfAlv6pZbEBpcXqW7-J9RxCkJ1UjYjSnY7Yo_aem_4s7W00HUkvd1c6v9o4cGHg' target='blank'><ReservarAgoraButton>Reservar Agora</ReservarAgoraButton></a> 
+            <ModalText>
+              Entre em contato para mais informações e reservas.
+            </ModalText>
+            <CloseButton onClick={() => setIsModalOpen(false)}>Fechar</CloseButton>
+            <a
+              href="https://api.whatsapp.com/send?phone=5581998991105&fbclid=PAZXh0bgNhZW0CMTEAAab6-ylk4xcwgfgUorzqG3cQfAlv6pZbEBpcXqW7-J9RxCkJ1UjYjSnY7Yo_aem_4s7W00HUkvd1c6v9o4cGHg"
+              target="blank"
+            >
+              <ReservarAgoraButton>Reservar Agora</ReservarAgoraButton>
+            </a>
           </div>
         </ModalContainer>
+      </ModalOverlay>
+
       )}
     </>
   );
