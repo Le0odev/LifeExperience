@@ -84,8 +84,8 @@ const Media = styled.div`
     position: relative; /* Para o efeito de zoom */
     
     &:hover img, &:hover video {
-        transform: scale(1.05); /* Efeito de zoom */
-        transition: transform 0.5s ease; /* Suavizar o zoom */
+        transform: scale(1.08); /* Efeito de zoom */
+        transition: transform 0.8s ease; /* Suavizar o zoom */
     }
 `;
 
@@ -136,25 +136,7 @@ const EventDate = styled.p`
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 `;
 
-const ReserveButton = styled.a`
-    background-color: #fecf03;
-    color: #000;
-    padding: 14px 28px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 20px rgba(254, 207, 3, 0.4);
-    cursor: pointer;
-    margin-top: 30px;
 
-    &:hover {
-        background-color: #e6b600;
-        transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    }
-`;
 
 interface Event {
     title: string;
